@@ -1,58 +1,107 @@
 # Introduction
 
-## **What is Git?**
-  - Git is an **open-source version control system** known for its:
-    - **Speed**
-    - **Stability**
-    - **Distributed collaboration model**
-  - Originally created in **2006** to manage the Linux kernel.
-  - Now has:
-    - A **comprehensive feature set**
-    - **Active development team**
-    - Several **free hosting communities**
+## What is Git?
+- Git is an **open-source version control system** known for its:
+  - **Speed**
+  - **Stability**
+  - **Distributed collaboration model**
+- Originally created in **2006** by *Linus Torvalds* to manage the Linux kernel.
+- Today, Git has:
+  - A **comprehensive feature set**
+  - **Active development team**
+  - Several **free hosting communities** like GitHub, GitLab, Bitbucket, etc.
 
-- **Design Philosophy:**
-  - Git was designed with a focus on:
-    - **Distributed software development** rather than following centralized versioning systems like SVN (Subersion) or CVS (Concurrent Versions Systems).
+## Introduction to Version Control
 
-- **Centralized vs. Distributed Version Control:**
-  - **Centralized systems** store file information in a single **central repository**.
-  - In **Git**, every developer has a **complete copy** of the repository.
-  - Git facilitates **collaboration** by enabling repositories to share changes with each other.
+- **Definition**: Version control is a system that tracks changes to files over time, enabling collaboration and version management.
+
+- **Key Benefits**:
+  - Maintains a **history of changes**, allowing you to view or revert to earlier versions.
+  - Facilitates **collaboration** by letting multiple people work on the same project simultaneously.
+  - Tracks **who made what changes** and when, providing accountability.
+  - Reduces risk by serving as a **backup system** for your code or files.
+
+- **Types of Version Control**:
+  - **Local Version Control**: Stores changes on a single machine. Simple but limited for collaboration.
+  - **Centralized Version Control**: Uses a central server to store files and version history (e.g., SVN, CVS).
+  - **Distributed Version Control**: Each user has a complete copy of the repository (e.g., Git, Mercurial).
+
+- **Common Use Cases**:
+  - Software development (code management).
+  - Document versioning and collaborative editing.
+  - Managing configuration files and scripts.
+
+- **Popular Tools**:
+  - Git, Mercurial, Subversion (SVN), CVS.
+  - Hosting services like GitHub, GitLab, and Bitbucket simplify sharing and collaboration.
+
+- **Why It’s Essential**:
+  - Helps avoid overwriting others' work.
+  - Enables parallel development.
+  - Provides a safety net against accidental data loss or errors.
+
+## Centralized vs. Distributed Version Control
+
+### Centralized Version Control Systems (CVCS)
+- **How It Works**:
+  - A single **central repository** stores all project files and version history.
+  - Developers pull files from the central server, make changes, and push them back.
+- **Examples**: Subversion (SVN), CVS.
+- **Key Features**:
+  - **Single Point of Truth**: The central server holds all the data.
+  - **Network Dependency**: You need to be connected to the server for most operations.
+  - **Simple to Understand**: The workflow is straightforward for small teams.
+- **Challenges**:
+  - If the central server goes down, work halts for everyone.
+  - Limited offline capabilities.
+
+### Distributed Version Control Systems (DVCS)
+- **How It Works**:
+  - Each developer has a **complete copy** of the repository, including full version history.
+  - Changes can be made offline and shared with others by syncing repositories.
+- **Examples**: Git, Mercurial.
+- **Key Features**:
+  - **Decentralized Model**: No single point of failure since every developer has a full backup.
+  - **Offline Work**: You can commit changes, view history, and work locally without a network.
+  - **Collaboration**: Developers can push/pull changes to/from each other's repositories.
+- **Advantages**:
+  - Fast and reliable, as most operations are local.
+  - Great for large teams and open-source projects.
+
+## Design Philosophy of Git
+- Git was designed with a focus on **distributed software development**, avoiding the limitations of centralized systems like SVN (Subversion) or CVS (Concurrent Versions Systems).
 
 ## Key Benefits of Git's Distributed Model
 
-1. **Faster Commands:**
+1. **Faster Commands**:
    - Since Git stores the repository locally, almost all actions are performed on the **local machine**, eliminating the need to communicate with a central server.
    - This leads to **faster commands** and the ability to **work offline** without workflow disruption.
 
-2. **Stability:**
+2. **Stability**:
    - Git's distributed nature means each collaborator has a **backup** of the entire project.
    - This lowers the risk of **data loss** from server crashes or repository corruption, a common issue in centralized systems reliant on a single point of access.
 
-3. **Isolated Environments:**
+3. **Isolated Environments**:
    - Every Git repository, whether **local or remote**, retains the **full history** of a project.
    - Having a complete and isolated environment allows users to experiment with **new features** before integrating them into the main project.
 
-4. **Efficient Merging:**
+4. **Efficient Merging**:
    - Since each developer has their own local history, their development branches may diverge.
    - Git excels in handling **divergent histories**, making it **highly efficient** at **merging branches** and resolving conflicts between different lines of development.
 
 
 # Git Components
 
-### Four Key Components of a Git Repository:
+## Four Key Components of a Git Repository
 1. **The Working Directory**
 2. **The Staging Area**
 3. **Committed History**
 4. **Development Branches**
 
-These four components form the core structure of a Git repository.
-
 ---
 
-### 1. **The Working Directory**
-- **What it is:**
+### 1. The Working Directory
+- **What It Is:**
   - The **working directory** is where you interact with your files during development.
   - It is where you **edit files**, **compile code**, and perform other tasks related to your project.
   - You can treat the working directory as a **normal folder** where you directly modify the contents of the project.
@@ -63,8 +112,8 @@ These four components form the core structure of a Git repository.
 
 ---
 
-### 2. **The Staging Area**
-- **What it is:**
+### 2. The Staging Area
+- **What It Is:**
   - The **staging area** acts as an intermediary between the **working directory** and the **project history**.
   - It allows you to prepare and organize changes before committing them to the history.
 
@@ -75,19 +124,19 @@ These four components form the core structure of a Git repository.
 
 ---
 
-### 3. **Committed History**
-- **What it is:**
+### 3. Committed History
+- **What It Is:**
   - Once changes are staged, you can **commit** them to the project history.
   - A **commit** records the state of the repository at a particular point in time.
-  
+
 - **Safety of Commits:**
   - Commits are considered "safe" in the sense that **Git does not alter them automatically**.
   - However, it is possible to **manually rewrite the project history** (e.g., with rebase or amend operations).
 
 ---
 
-### 4. **Development Branches**
-- **What they are:**
+### 4. Development Branches
+- **What They Are:**
   - Branches allow you to **fork the project history** and develop multiple features in **parallel**.
   - A branch creates a divergent path for your work, enabling you to develop **independently** without disrupting the main project history.
 
@@ -97,327 +146,744 @@ These four components form the core structure of a Git repository.
 
 - **Branching in Git:**
   - Git branches are commonly used for:
-    - **Long-running features** with multiple contributors
-    - **Quick fixes** (e.g., 5-minute patches)
-  - Many developers prefer to work in **dedicated topic branches**, keeping the main history branch (e.g., `main` or `master`) clean and for **public releases**.
-
+    - **Long-running features** with multiple contributors.
+    - **Quick fixes** (e.g., 5-minute patches).
+  - Many developers prefer to work in **dedicated topic branches**, keeping the main history branch (e.g., `main` or `master`) clean and reserved for **public releases**.
 
 # Getting Started
 
-## **Git Installation & SSH Setup**
+## **Step 1: Install Git and SSH**
 
-1. **Install Git:**
-   ```bash
-   sudo apt update
-   sudo apt install git
-   ```
+### 1. **Install Git**
+```bash
+sudo apt update
+sudo apt install git
+```
 
-1. **Install OpenSSH (if not already installed):**
-   ```bash
-   sudo apt install openssh-client
-   ```
+### 2. **Install OpenSSH**
+- If OpenSSH is not already installed, use the following command:
+```bash
+sudo apt install openssh-client
+```
 
-1. **SSH Setup:**
-   - **Generate SSH Key Pair (if you don't have one already):**
-     ```bash
-     ssh-keygen -t ed25519 -C "your_email@example.com"
-     ```
-     - This will generate a public and private SSH key in `~/.ssh/`.
+---
 
-   - **Add the SSH Key to the SSH Agent:**
-     ```bash
-     eval "$(ssh-agent -s)"
-     ssh-add ~/.ssh/id_ed25519
-     ```
+## **Step 2: Set Up SSH for GitHub**
 
-   - **Add the SSH Key to GitHub (or other Git services):**
-     - Copy the public key:
-       ```bash
-       cat ~/.ssh/id_ed25519.pub
-       ```
-     - Log in to your GitHub account, go to **Settings > SSH and GPG keys**, and add the copied public key.
+### 1. **Generate an SSH Key Pair**
+- Run the following command to create an SSH key:
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+- The above step will ask for a *location* to store SSH and a *passphrase* for protection. You can leave the *location* as default by not providing one. 
+- This will generate a public and private SSH key in the `~/.ssh/` directory.
 
-2. **Test SSH Connection:**
-   - To ensure SSH is working properly, test the connection to GitHub:
-     ```bash
-     ssh -T git@github.com
-     ```
-     You should see a success message like:
-      ```
-      Hi <username>! You've successfully authenticated, but GitHub does not provide shell access.
-      ```
+### 2. **Add the SSH Key to the SSH Agent**
+- Start the SSH agent:
+```bash
+eval "$(ssh-agent -s)"
+```
+- Add your SSH private key:
+```bash
+ssh-add ~/.ssh/id_ed25519
+```
 
-   > To switch from HTTPS (which prompts for a username and password) to SSH for pushing changes, follow these steps:
+### 3. **Add the SSH Key to GitHub**
+- Copy the public SSH key:
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+- Log in to your GitHub account, navigate to **Settings > SSH and GPG Keys**, and add the copied key.
 
-5. **Update Your Git Remote to Use SSH instead of HTTPS**
-   1. Check your current remote URL:
-      ```bash
-      git remote -v
-      ```
+---
 
-      If the URL starts with `https://`, you need to change it to SSH.
+## **Step 3: Test Your SSH Connection**
+- Verify the SSH connection to GitHub:
+```bash
+ssh -T git@github.com
+```
+- If successful, you should see:
+```
+Hi <username>! You've successfully authenticated, but GitHub does not provide shell access.
+```
 
-   2. Update the remote URL:
-      ```bash
-      git remote set-url origin git@github.com:username/repository.git
-      ```
-      Replace `username/repository` with your GitHub username and repository name.
+---
 
-   3. Verify the change:
-      ```bash
-      git remote -v
-      ```
-      The output should now show `git@github.com` instead of `https://`.
+## **Step 4: Set SSH as Default for All Repositories**
+- To always use SSH when cloning or interacting with repositories:
+```bash
+$ git config --global url."git@github.com:".insteadOf "https://github.com/"
+```
+- This modifies the `~/.gitconifg` file: 
+```
+[url "git@github.com:"]
+          insteadOf = https://github.com/
+```
 
+## **Step 5: Configure Git**
 
-   3. **Push Changes**  
-      Now, push changes using SSH:
-      ```bash
-      git push
-      ```
-      You won’t be prompted for a username and password anymore.
+### 1. **Set User Information**
+- Set your name and email, which will be recorded with your commits:
+```bash
+$ git config --global user.name "John Smith"
+$ git config --global user.email "john@example.com"
+```
+- Use the `--global` flag to apply these settings globally or omit it for repository-specific settings.
 
+### 2. **Set Your Preferred Editor**
+- Configure the default text editor for Git (e.g., VS Code):
+```bash
+$ git config --global core.editor "code --wait"
+```
+- Replace `code --wait` with your preferred editor, like `nano` or `vim`. The `--wait` flag ensures Git waits for the editor to close before proceeding.
 
-   4. **Optional: Set SSH as the Default for All Repositories**  
-      To avoid manually changing the remote for each repository, you can configure Git to always use SSH when cloning:
-      ```bash
-      git config --global url."git@github.com:".insteadOf "https://github.com/"
-      ```
+### 3. **Create Command Aliases**
+- Simplify commonly used Git commands with aliases:
+```bash
+# Syntax:
+$ git config [--global] alias.<alias_name> "<command>"
 
+# Examples:
+$ git config --global alias.st status
+$ git config --global alias.pu "push -u origin main"
+```
+- For instance, use `git st` instead of `git status`.
+- Here is how `~/.gitconfig` file would like after executing above commands:
+```
+[user]
+	name = John Smith
+	email = john@example.com
+[core]
+	editor = code --wait
+[alias]
+	st = status
+	pu = push -u origin main
+```
 
-## **Configuration**
-
-Git has a variety of configuration options that you can customize. These options can be set using the `git config` command or by directly editing the `.gitconfig` file located in your home directory.
-
-### **Common Configuration Options:**
-
-1. **User Info:**
-   - Set your name and email, which will be recorded with your commits:
-     ```bash
-     git config --global user.name "John Smith"
-     git config --global user.email "john@example.com"
-     ```
-   - The `--global` flag stores these settings in the global `.gitconfig` file, making them the default for all repositories. You can omit `--global` to set repository-specific configurations.
-
-2. **Editor:**
-   - Git uses a text editor for many tasks (e.g., commit messages). Set your preferred editor:
-     ```bash
-     git config --global core.editor "code --wait"
-     ```
-   - Replace `"code --wait"` with the text editor of your choice, like `nano`, `vim`, or `gvim`.
-   - The fragment `code --wait` tells git to use VS Code for editing messages or resolve merge conflicts. `--wait` tells git to wait until changes are made in editor. 
-
-3. **Aliases:**
-   - Git allows you to create aliases for commonly used commands. For example:
-     ```bash
-     # Syntax
-     git conifg [--global] alias.alias_name "command"
-
-     # Examples
-     git config --global alias.st status
-     git config --global alias.pu "push -u origin main"
-     ```
-   - These aliases will allow you to run shorter commands, such as `git st` for `git status`.
-
-   - You can explore more options by running `git help config` in your Git Bash terminal.
+### 4. **Explore More Options**
+- Run `git help config` in the terminal to see all available configuration options.
 
 
-## **Initializing Repositories**
+# **Initializing Repositories**
 
-### **Creating a New Repository:**
+## **Creating a New Repository:**
   
-  - To initialize a repository, run the following:
-    ```bash
-    # Syntax
-    git init <path>
+- To initialize a repository, run the following:
+```bash
+# Syntax
+$ git init <path>
 
-    # Examples
-    git init 
-    git init ~/Documents/SampleProject
-    ```
-  - The `<path>` argument can be left blank to initialize the repository in the current directory.
-   -  Git is minimally invasive; it only adds a `.git` directory in the root of your project folder.
+# Examples
+$ git init 
+$ git init ~/Documents/SampleProject
+```
+- The `<path>` argument can be left blank to initialize the repository in the current directory.
+ -  Git is minimally invasive; it only adds a `.git` directory in the root of your project folder.
 
-### **Cloning an Existing Repository:**
-  - Instead of initializing a new repository, you can **clone** an existing Git repository:
-    ```bash
-    # Syntax
-    git clone ssh://<user>@<host>/path/to/repo[.git]
-    git clone https://github.com/user/repo[.git]
+## **Cloning an Existing Repository:**
+- Instead of initializing a new repository, you can **clone** an existing Git repository:
+```bash
+# Syntax
+$ git clone ssh://<user>@<host>/path/to/repo[.git]
+$ git clone https://github.com/user/repo[.git]
 
-    # Examples
-    git clone ssh://git@github.com/rnaveensrinivas/GitRepo
-    git clone https://github.com/rnaveensrinivas/GitRepo
-    ```
-  - This command will create a full copy of the repository, including its history, working directory, staging area, and branch structure. Changes won’t be visible to others until you push them to a public repository.
+# Examples
+$ git clone ssh://git@github.com/rnaveensrinivas/GitRepo
+$ git clone https://github.com/rnaveensrinivas/GitRepo
+```
+- This command will create a full copy of the repository, including its history, working directory, staging area, and branch structure. Changes won’t be visible to others until you push them to a public repository.
 
-Here’s an organized and detailed set of **bullet point notes** for **Chapter 3: Recording Changes**:
+## Optional: Swtiching to use SSH Instead of HTTPS for Cloned Repositories
+
+### 1. **Check Your Current Remote URL**
+- You must in a repository that is associated with Github execute the following command. If you don't have one simply create a GitHub repository and clone it in local. 
+- Run the following command:
+```bash
+$ git remote -v
+```
+- If the URL starts with `https://`, you need to change it to SSH.
+
+### 2. **Update the Remote URL**
+- Replace `username/repository` with your GitHub username and repository name:
+```bash
+$ git remote set-url origin git@github.com:username/repository.git
+```
+
+### 3. **Verify the Change**
+- Check the updated remote URL:
+```bash
+$ git remote -v
+```
+- The output should now display `git@github.com` instead of `https://`.
+
+### 4. **Push Changes Using SSH**
+- Push your changes without being prompted for a username and password:
+```bash
+$ git push
+```
+
+### 5. **Optional: Set SSH as Default for All Repositories**
+- To always use SSH when cloning or interacting with repositories:
+```bash
+$ git config --global url."git@github.com:".insteadOf "https://github.com/"
+```
+
+## Summary of Commands
+| Command  | Description |
+|----------|-------------|
+| `git config --global user.name "name"`| Sets the global Git username for all repositories.|
+| `git config --global user.email "email"`| Sets the global Git email for all repositories.|
+| `git config --global core.editor "editor --wait"`| Sets the default text editor for Git commands requiring user input, like commit messages.|
+| `git config --global alias.alias_name "command"`| Creates a shortcut (alias) for a Git command.|
+| `git help config`| Displays help information about Git configuration options.|
+| `git init`| Initializes a new Git repository in the current directory.|
+| `git init path`| Initializes a new Git repository at the specified path.|
+| `git clone ssh://<user>@<host>/path/to/repo[.git]`| Clones a repository from a remote server using an SSH URL with user and host details.|
+| `git clone https://github.com/user/repo[.git]`| Clones a repository from GitHub or another remote server using an HTTPS URL.|
+| `git remote -v`| Displays the list of remote repositories and their URLs.|
+| `git remote url remote_name new_url`| Updates the URL for a specified remote repository.|
 
 # Recording Changes
 
-## **Snapshots vs. Diffs in Git**
-- **Git’s Snapshot Model**:
+## **Git Snapshots vs. CVCS Diffs**
+### **Git’s Snapshot Model**:
   - Git records **snapshots** of the entire project instead of just diffs between files (as in SVN or CVS).
   - Each **commit** in Git represents a complete snapshot of all project files at a given point in time, making Git faster and more reliable.
   - Unlike systems that record incremental changes, Git stores the full version of each file in a commit.
   
-  **Advantages:**
+#### **Advantages:**
   - Faster access to file versions.
   - Avoids the need to regenerate file states when requested.
 
 ## **The Staging Area**
 
-- **What is the Staging Area?**
-  - The **staging area** (also known as the **index**) is an intermediary between the **working directory** and the **committed history**.
-  - It allows you to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once.
+### **What is the Staging Area?**
+- The **staging area** (also known as the **index**) is an intermediary between the **working directory** and the **committed history**.
+- It allows you - The **staging area** (also known as the **index**) is an intermediary between the **working directory** and the **committed history**.
+- It allows you to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once.to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once.
 
-- **Staging Changes:**
-  - **Add files to the staging area** using:
-    ```bash
-    # Syntax
-    git add <file>
+### **Staging Changes:**
+- **Add stuff to the staging area** using:
+```bash
+# Syntax
+$ git add <path>
 
-    # Examples
-    git add .
-    git add ..
-    ```
+# Examples
+$ git add .
+$ git add afolder/
+$ git add f1
+```
 
-  - **Stage file deletion** (without removing the file from the working directory):
-    ```bash
-    git rm --cached <file>
-    ```
-    **what happens if you simply do `git rm` or `rm`?**
+### **Stage file deletion** (without removing the file from the working directory):
+```bash
+# Syntax
+$ git rm --cached <file>
+
+# Examples
+$ git rm --cached f1
+$ git rm -r --cached afolder/
+```
+#### **What happens if you simply do `git rm` or `rm`?**
+```bash
+# trying to use "git rm" on staged f1
+$ git rm f1
+error: the following file has changes staged in the index:
+    f1
+(use --cached to keep the file, or -f to force removal)
+
+# trying to use "git rm" on a tracked file afolder/f4
+$ git rm afolder/f4
+rm 'afolder/f4'
+# removes the file from working directory and stages the removal
 
 
-## **Inspecting the Stage**
+# trying to use "rm" on staged f1
+$ rm f1
 
-- **Check the Status of the Repository:**
-  - To view the state of your repository and see which files are staged, modified, or untracked, use:
-    ```bash
-    git status
-    ```
+$ git status
+On branch master
 
-   **Example Output:**
-   - **Changes to be committed**: Files staged for commit.
-   - **Changes not staged for commit**: Modified files that are not yet staged.
-   - **Untracked files**: Files in the working directory that are not part of the repository.
+No commits yet
 
-- **Diffs:**
-  - To see **unstaged changes** (changes in the working directory):
-    ```bash
-    git diff
-    ```
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+  new file:   f1
 
-  - To see **staged changes** (changes in the staging area):
-    ```bash
-    git diff --cached
-    ```
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  deleted:    f1
+```
+
+### Inspecting the Stage
+
+#### Check the Status of the Repository:
+- To view the state of your repository and see which files are staged, modified, or untracked, use:
+```bash
+$ git status
+```
+
+##### Example Output:
+- **Changes to be committed**: Files staged for commit.
+- **Changes not staged for commit**: Modified files that are not yet staged.
+- **Untracked files**: Files in the working directory that are not part of the repository.
+```bash
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   f1
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   afolder/f3
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	f2
+```
+
+
+#### **Diffs:**
+- To see **unstaged changes** (changes in the working directory):
+```bash
+# Syntax 
+$ git diff
+
+# Example
+$ git diff
+diff --git a/afolder/f3 b/afolder/f3
+index e69de29..3b18e51 100644
+--- a/afolder/f3
++++ b/afolder/f3
+@@ -0,0 +1 @@
++hello world
+```
+
+- To see **staged changes** (changes in the staging area):
+```bash
+# Syntax
+$ git diff --cached
+
+# Example
+$ git diff --cached
+diff --git a/f1 b/f1
+index e69de29..3b18e51 100644
+--- a/f1
++++ b/f1
+@@ -0,0 +1 @@
++hello world
+```
 
 ## **Commits**
 
-- **What is a Commit?**
-  - A **commit** is a snapshot of your project at a specific point in time, and it serves as an atomic unit in Git's version control.
-  - Each commit contains:
-    - The **snapshot** of the entire project.
-    - **Author information** (name and email).
-    - The **commit message**.
-    - A **unique SHA-1 checksum** that ensures the commit cannot be unintentionally altered.
+### **What is a Commit?**
+- A **commit** is a snapshot of your project at a specific point in time, and it serves as an atomic unit in Git's version control.
+- Each commit contains:
+  - The **snapshot** of the entire project.
+  - **Author information** (name and email).
+  - The **commit message**.
+  - A **unique SHA-1 checksum** that ensures the commit cannot be unintentionally altered.
 
-- **Commit Process:**
-  - **Commit the staged snapshot** to the repository history:
-    ```bash
-    git commit
-    ```
-  - You'll be prompted to provide a **commit message** in a text editor.
+### **Commit Process:**
+- **Commit the staged snapshot** to the repository history:
+```bash
+git commit
+```
+- You'll be prompted to provide a **commit message** in a text editor.
 
-- **Commit Message Format:**
-  - **First line (summary)**: A brief description (50 characters or less).
-  - **Second line**: Blank line.
-  - **Following lines**: A detailed description of changes, reasons, or relevant ticket numbers.
+### **Commit Message Format:**
+- **First line (summary)**: A brief description (50 characters or less).
+- **Second line**: Blank line.
+- **Following lines**: A detailed description of changes, reasons, or relevant ticket numbers.
 
-  Example:
-  ```plaintext
-  Fixed bug in user authentication
+Example:
+```plaintext
+Fixed bug in user authentication
 
-  Detailed fix for user authentication issues, including validation errors
-  and user session management.
-  ```
+Detailed fix for user authentication issues, including validation errors
+and user session management.
+```
+### **Commiting using options**
+- Commiting without opening default text editor.
+```bash
+# Sytnax
+$ git commit -m "commit message"
+
+# Example
+git commit -m "This is a commit message"
+[master (root-commit) cbd9be4] This is a commit message
+1 file changed, 0 insertions(+), 0 deletions(-)
+create mode 100644 afile.txt
+```
+
+### **Inspecting Commits**
+
+#### **View Commit History:**
+- To see the list of commits in the current branch:
+```bash
+# Syntax
+git log
+
+# Example
+git log
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+```
+
+#### **Useful Options:**
+- **Single-line log** (brief):
+```bash
+# Syntax
+git log --oneline
+
+# Example
+git log --oneline
+cbd9be4 (HEAD -> master) commit message
+```
+
+- **Log for a specific file**:
+```bash
+# Syntax
+git log [--oneline] <file>
+
+# Examples
+git log afile.txt
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+
+# Example
+git log --oneline afile.txt
+cbd9be4 (HEAD -> master) commit message
+
+```
+
+- **Log for a specific range of commits**:
+- `<since>` commit is excluded and `<until>` commit is included. 
+```bash
+# Syntax
+git log <since>..<until>
+
+# Examples
+git log
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+commit e09fdab287149a6c6a4c176b8c4a40df15284abd
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:03:24 2024 +0530
+
+    changed file names
+
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+
+# cbd9be4 is excluded but 169223b is included.
+git log cbd9be4..169223b
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+commit e09fdab287149a6c6a4c176b8c4a40df15284abd
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:03:24 2024 +0530
+
+    changed file names
+
+# e09fdab is excluded but 169223b is included.
+git log e09fdab..169223b
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+```
 
 
-## **Inspecting Commits**
+- **Display a diffstat** (changes made in each commit):
+```bash
+# Syntax
+git log --stat
 
-- **View Commit History:**
-  - To see the list of commits in the current branch:
-    ```bash
-    git log
-    ```
+# Example
+git log --stat
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
 
-  - **Useful Options:**
-    - **Single-line log** (brief):
-      ```bash
-      git log --oneline
-      ```
+    added some files in afolder
 
-    - **Log for a specific file**:
-      ```bash
-      git log [--oneline] <file>
-      ```
+afolder/f3 | 0
+afolder/f4 | 0
+2 files changed, 0 insertions(+), 0 deletions(-)
 
-    - **Log for a specific range of commits**:
-      ```bash
-      git log <since>..<until>
-      ```
+commit e09fdab287149a6c6a4c176b8c4a40df15284abd
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:03:24 2024 +0530
 
-    - **Display a diffstat** (changes made in each commit):
-      ```bash
-      git log --stat
-      ```
+    changed file names
 
-- **Visualizing History:**
-  - Use `gitk` to visualize the commit history graphically (available as a separate program).
-    ```bash
-    gitk
-    ```
+a => afile.txt | 0
+afolder/f1     | 0
+afolder/f2     | 0
+3 files changed, 0 insertions(+), 0 deletions(-)
 
-## 6. **Tagging Commits**
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
 
-- **What are Tags?**
-  - Tags are **pointers** to specific commits, useful for marking important points in the project’s history, such as release versions.
+    commit message
 
-- **Creating a Tag:**
-  - To create an **annotated tag** with a message:
-    ```bash
-    git tag -a v1.0 -m "Stable release"
-    ```
+a | 0
+1 file changed, 0 insertions(+), 0 deletions(-)
 
-- **List Tags:**
-  - To see the list of tags in the repository:
-    ```bash
-    git tag
-    ```
+```
+
+#### **Visualizing History:**
+- Use `gitk` to visualize the commit history graphically (available as a separate program).
+```bash
+gitk
+```
+
+## **Tagging Commits**
+
+### **What are Tags?**
+- Tags are **pointers** to specific commits, useful for marking important points in the project’s history, such as release versions.
+
+
+### **Creating a Tag**  
+* To create a lightweight tag on the commit you are sitting on:  
+```bash
+# Syntax
+git tag <tag_name>
+
+# Example
+git tag v1.0
+
+# notice the end of commit 169223b
+git log
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master, tag: v1.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+commit e09fdab287149a6c6a4c176b8c4a40df15284abd
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:03:24 2024 +0530
+
+    changed file names
+
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+```
+* Adding a commit and printing the log, we can see tag stays behind.
+
+```bash
+git log
+commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:19:52 2024 +0530
+
+    changed file name
+
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+commit e09fdab287149a6c6a4c176b8c4a40df15284abd
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:03:24 2024 +0530
+
+    changed file names
+
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+```
+
+* To create an annotated tag with a message:  
+```bash
+# Syntax
+git tag -a <tag_name> -m "Tag Message"
+
+# Example
+git tag -a v2.0 -m "Initial release"
+git log
+commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:19:52 2024 +0530
+
+    changed file name
+
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+commit e09fdab287149a6c6a4c176b8c4a40df15284abd
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:03:24 2024 +0530
+
+    changed file names
+
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+```
+
+### **Listing Tags**  
+* To see all tags in the repository:  
+```bash
+# Syntax
+git tag
+
+# Example
+git tag
+v1.0
+v2.0
+```
+
+### **Pushing Tags to Remote**  
+* By default, tags are not pushed to remote. Push a specific tag:  
+```bash
+# Syntax 
+git push origin <tag_name>
+```
+
+To push all tags:  
+```bash
+# Syntax
+git push --tags
+```
+
+### **Viewing a Tag**  
+* To see details of a tag:  
+```bash
+# Syntax
+git show <tag_name>
+```
+#### Examples
+
+* Normal tag
+```bash
+git show v1.0
+commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:04:00 2024 +0530
+
+    added some files in afolder
+
+diff --git a/afolder/f3 b/afolder/f3
+new file mode 100644
+index 0000000..e69de29
+diff --git a/afolder/f4 b/afolder/f4
+new file mode 100644
+index 0000000..e69de29
+```
+
+* Annotated tag
+```bash
+git show v2.0
+tag v2.0
+Tagger: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:24:26 2024 +0530
+
+Initial release
+
+commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:19:52 2024 +0530
+
+    changed file name
+
+diff --git a/afile.txt b/f1
+similarity index 100%
+rename from afile.txt
+rename to f1
+```
+
+### **Using Tags for Checkout**  
+* To checkout a specific tag (in a detached HEAD state):  
+```bash
+# Syntax
+git checkout <tag_name>
+
+# Example
+git checkout v1.0 
+Note: switching to 'v1.0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 169223b added some files in afolder
+```
 
 
 ## Summary of Commands:
+| Command                               | Description                                                                                         |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `git add`                             | Stages all changes in the working directory for the next commit.                                   |
+| `git add file/folder`                 | Stages specific files or folders for the next commit.                                              |
+| `git rm`                              | Removes files from the working directory and stages the deletion for the next commit.             |
+| `git rm --cached file`                | Removes a file from the staging area without deleting it from the working directory.              |
+| `git rm -r --cached folder`           | Removes a folder from the staging area without deleting it from the working directory.            |
+| `git status`                          | Shows the status of the working directory and staging area, listing changes to be committed.      |
+| `git diff`                            | Displays unstaged changes in the working directory.                                               |
+| `git diff --cached`                   | Displays changes staged for the next commit.                                                      |
+| `git commit`                          | Commits staged changes to the repository.                                                         |
+| `git commit -m "commit message"`      | Commits staged changes with a descriptive message in a single step.                               |
+| `git log`                             | Displays the commit history of the repository.                                                    |
+| `git log --oneline`                   | Shows a concise commit history with one commit per line.                                          |
+| `git log --oneline file/folder`       | Shows a concise commit history for a specific file or folder.                                     |
+| `git log <since>..<until>`            | Displays commits between two references (e.g., tags, branches), with `<since>` being exclusive.    |
+| `git log --stat`                      | Shows commit history along with a summary of changes made in each commit.                         |
+| `git tag tag_name`                    | Creates a lightweight tag for the current commit.                                                 |
+| `git tag -a tag_name -m "tag message"` | Creates an annotated tag with a message for the current commit.                                   |
+| `git tag`                             | Lists all tags in the repository.                                                                 |
+| `git push origin tag_name`            | Pushes a specific tag to the remote repository.                                                   |
+| `git push --tags`                     | Pushes all tags to the remote repository.                                                         |
+| `git show tag_name`                   | Displays details of a specific tag, including the commit it references.                           |
+| `git checkout tag_name`               | Checks out a specific tag, detaching the HEAD to a read-only state.                               |
 
-- **Stage Files:**
-  - `git add <file>`
-  - `git rm --cached <file>`
-- **Check Repository Status:**
-  - `git status`
-- **View Changes:**
-  - `git diff` (working directory)
-  - `git diff --cached` (staged changes)
-- **Commit Changes:**
-  - `git commit`
-- **View Commit History:**
-  - `git log`
-  - `git log --oneline`
-  - `git log --stat`
-- **Tagging:**
-  - `git tag -a <tag_name> -m "<message>"`
-  - `git tag` (list tags)
-
-Here’s an organized breakdown of **Chapter 4: Undoing Changes** into **bullet points**:
 
 # Undoing Changes
 
@@ -578,11 +1044,11 @@ Merging is used to combine changes from one branch into another. The two common 
 
 If two branches have conflicting changes to the same file, Git will raise a merge conflict, and you’ll need to manually resolve it by editing the file. After fixing the conflict, stage the file with:
 ```bash
-git add <file>
+$ git add <file>
 ```
 Then commit the merge:
 ```bash
-git commit
+$ git commit
 ```
 
 ## Branching Workflows
@@ -599,8 +1065,8 @@ There are two main types of branches:
 
 Rebasing allows you to move a branch to a new base, cleaning up the commit history. This is done using:
 ```bash
-git checkout <feature-branch>
-git rebase <base-branch>
+$ git checkout <feature-branch>
+$ git rebase <base-branch>
 ```
 Rebasing results in a linear commit history, as opposed to merging, which may introduce unnecessary merge commits.
 
@@ -608,7 +1074,7 @@ Rebasing results in a linear commit history, as opposed to merging, which may in
 
 Interactive rebasing allows you to modify commits during the rebase process. You can reorder, squash, or amend commits. To start an interactive rebase, use:
 ```bash
-git rebase -i <base-branch>
+$ git rebase -i <base-branch>
 ```
 
 ## Rewriting History
