@@ -111,14 +111,17 @@ These four components form the core structure of a Git repository.
    sudo apt update
    sudo apt install git
    ```
-
-1. **Install OpenSSH (if not already installed):**
+  > If you are working with Linux command line, then *pushing changes* to GitHub needs to be done via SSH. By default git tries to use HTTPS which requries username and password. SSH is more secure than HTTPS, hence we will do SSH setup. 
+2. **Install OpenSSH (if not already installed):**
    ```bash
    sudo apt install openssh-client
    ```
 
 1. **SSH Setup:**
    - **Generate SSH Key Pair (if you don't have one already):**
+     - **Note!** When running the below command, you will be asked:
+       - a _location_ to save key-pair, **leave it empty** by pressing **Enter**
+       - a _passphrase_, which you will use to work with pushing changes to GitHub.
      ```bash
      ssh-keygen -t ed25519 -C "your_email@example.com"
      ```
@@ -150,25 +153,35 @@ These four components form the core structure of a Git repository.
    > To switch from HTTPS (which prompts for a username and password) to SSH for pushing changes, follow these steps:
 
 5. **Update Your Git Remote to Use SSH instead of HTTPS**
-   1. Check your current remote URL:
+   1. Check your current remote URL **within your repository**:
       ```bash
       git remote -v
       ```
 
-      If the URL starts with `https://`, you need to change it to SSH.
+      If the URL starts with `https://`, you need to change it to SSH.  
+      For eg.
+      ```
+      origin	https://github.com/rnaveensrinivas/Linux (fetch)
+      origin	https://github.com/rnaveensrinivas/Linux (push)
+      ```
+      In the above we need to change `https://github.com/` to `git@github.com:`
 
-   2. Update the remote URL:
+   3. Update the remote URL:
       ```bash
       git remote set-url origin git@github.com:username/repository.git
       ```
       Replace `username/repository` with your GitHub username and repository name.
 
-   3. Verify the change:
+   4. Verify the change:
       ```bash
       git remote -v
       ```
       The output should now show `git@github.com` instead of `https://`.
-
+      For eg.
+      ```
+      origin	git@github.com:rnaveensrinivas/Linux.git (fetch)
+      origin	git@github.com:rnaveensrinivas/Linux.git (push)
+      ```
 
    3. **Push Changes**  
       Now, push changes using SSH:
@@ -183,6 +196,12 @@ These four components form the core structure of a Git repository.
       ```bash
       git config --global url."git@github.com:".insteadOf "https://github.com/"
       ```
+      This modifies `~/.gitconfig` file, it adds the below lines,
+      ```
+      [url "git@github.com:"]
+	            insteadOf = https://github.com/
+      ```
+      **This completes SSH setup. 😄**
 
 
 ## **Configuration**
@@ -205,7 +224,8 @@ Git has a variety of configuration options that you can customize. These options
      git config --global core.editor "code --wait"
      ```
    - Replace `"code --wait"` with the text editor of your choice, like `nano`, `vim`, or `gvim`.
-   - The fragment `code --wait` tells git to use VS Code for editing messages or resolve merge conflicts. `--wait` tells git to wait until changes are made in editor. 
+   - The fragment `code --wait` tells git to use VS Code for editing messages or resolve merge conflicts. `--wait` tells git to wait until changes are made in editor.
+   
 
 3. **Aliases:**
    - Git allows you to create aliases for commonly used commands. For example:
@@ -218,7 +238,20 @@ Git has a variety of configuration options that you can customize. These options
      git config --global alias.pu "push -u origin main"
      ```
    - These aliases will allow you to run shorter commands, such as `git st` for `git status`.
-
+   - Below is a view of `~/.gitconfig` file after running the above commads
+  
+      ```
+      [user]
+      	name = rnaveensrinivas
+      	email = rnaveensrinivas@gmail.com
+      [core]
+      	editor = code --wait
+      [url "git@github.com:"]
+      	insteadOf = https://github.com/
+      [alias]
+      	st = status
+      	pu = push -u origin main
+      ```
    - You can explore more options by running `git help config` in your Git Bash terminal.
 
 
