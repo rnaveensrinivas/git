@@ -190,26 +190,24 @@ $ sudo apt install openssh-client
 ### Add the SSH Key to the SSH Agent
 Start the SSH agent:
 ```bash
-sri@envy:~
-$ ssh-agent -s # Don't execute this command, it's just for reference. 
-SSH_AUTH_SOCK=/tmp/ssh-abc12345/agent.1234; export SSH_AUTH_SOCK;
-SSH_AGENT_PID=1234; export SSH_AGENT_PID;
-echo Agent pid 1234;
-sri@envy:~
 $ eval $(ssh-agent -s)
-Agent pid 1234
 ```
+* What does ```ssh-agent -s``` contain?
+  ```bash
+  $ ssh-agent -s  
+  SSH_AUTH_SOCK=/tmp/ssh-abc12345/agent.1234; export SSH_AUTH_SOCK;
+  SSH_AGENT_PID=1234; export SSH_AGENT_PID;
+  echo Agent pid 1234;
+  ```
 
 Add your SSH **private key**:
 ```bash
-sri@envy:~
 $ ssh-add ~/.ssh/id_ed25519
 ```
 
 ### Add the SSH Key to GitHub
 Copy the **public SSH key**:
 ```bash
-sri@envy:~
 $ cat ~/.ssh/id_ed25519.pub
 ```
 Log in to your GitHub account, navigate to **Settings > SSH and GPG Keys**, and add the copied key.
@@ -219,7 +217,6 @@ Log in to your GitHub account, navigate to **Settings > SSH and GPG Keys**, and 
 ## Test Your SSH Connection
 Verify the SSH connection to GitHub:
 ```bash
-sri@envy:~
 $ ssh -T git@github.com
 ```
 If successful, you should see:
@@ -243,12 +240,12 @@ This modifies the `~/.gitconifg` file, which will look like the follow:
 ## Configure Git
 
 ### Set User Information
-Set your name and email, which will be recorded with your commits:
+Set your name and email, which will be recorded with your commits and also third-party services require them:
 ```bash
 $ git config --global user.name "Naveen Srinivas"
 $ git config --global user.email "tonaveensrinivas@gmail.com"
 ```
-Use the `--global` flag to apply these settings globally or omit it for repository-specific settings.
+Use the `--global` flag to apply these settings globally (modifies the `~/.gitconfig file`) or omit it for repository-specific settings.
 
 ### Set Your Preferred Editor
 Configure the default text editor for Git (e.g., VS Code):
@@ -267,8 +264,9 @@ $ git config [--global] alias.<alias_name> "<command>"
 $ git config --global alias.st status
 $ git config --global alias.pu "push -u origin main"
 ```
-- Here is how `~/.gitconfig` file would like after executing above commands:
-```
+
+Here is how `~/.gitconfig` file would like after executing above commands:
+```plaintext
 [user]
 	name = Naveen Srinivas
 	email = tonaveensrinivas@gmail.com
@@ -282,6 +280,7 @@ $ git config --global alias.pu "push -u origin main"
 ### Explore More Options
 Run `git help config` in the terminal to see all available configuration options.
 
+---
 
 # Initializing Repositories
 
@@ -299,7 +298,7 @@ $ git init ~/Documents/SampleProject
 The `<path>` argument can be left blank to initialize the repository in the current directory. Git is **minimally invasive**; it only adds a `.git` directory in the root of your project folder.
 
 ## Cloning an Existing Repository:
-Instead of initializing a new repository, you can **clone** an existing Git repository:
+Instead of initializing a new repository, you can **clone** an existing Git repository using ssh (preferred) or https:
 ```bash
 # Syntax
 $ git clone ssh://<user>@<host>/path/to/repo[.git]
@@ -314,12 +313,12 @@ This command will create a full copy of the repository, including its history, w
 ## Optional: Swtiching to use SSH Instead of HTTPS for Cloned Repositories
 
 ### Check Your Current Remote URL
-You must be in a repository that is associated with Github execute the following command. If you don't have one simply create a GitHub repository and clone it in local. 
+You must be in a repository that is associated with Github to execute the following command. If you don't have one simply create a GitHub repository and clone it in local. 
 - Run the following command:
 ```bash
 $ git remote -v
 ```
-If the URL starts with `https://`, you need to change it to SSH.
+If the URL starts with `https://`, then it uses HTTPS Protocol, it can be changed to use `ssh` with the following steps. 
 
 ### Update the Remote URL
 Replace `username/repository` with your GitHub username and repository name:
@@ -362,60 +361,81 @@ $ git config --global url."git@github.com:".insteadOf "https://github.com/"
 | `git remote -v`| Displays the list of remote repositories and their URLs.|
 | `git remote url remote_name new_url`| Updates the URL for a specified remote repository.|
 
-# Recording Changes
+---
 
-## Git Snapshots vs. CVCS Diffs
-### Git's Snapshot Model:
+# Recording Changes
+Version Control System's core job is to maintain a series of *safe* revisions of project. Git does this with the help of **snapshots**. 
+
+## Git Snapshots
 - Git records **snapshots** of the entire project instead of just diffs between files (as in SVN or CVS).
 - Each **commit** in Git represents a complete snapshot of all project files at a given point in time, making Git faster and more reliable.
 - Unlike systems that record incremental changes, Git stores the full version of each file in a commit.
   
-#### Advantages:
+### Advantages:
 - Faster access to file versions.
 - Avoids the need to regenerate file states when requested.
 
-## The Staging Area (Index)
+## The Staging Area (also called Index)
 
 ### What is the Staging Area?
 - The **staging area** (also known as the **index**) is an intermediary between the **working directory** and the **committed history**.
 - It allows you to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once. 
 
-### Staging Changes:
-- **Add stuff to the staging area** using:
+---
+
+### Staging Changes
+
+#### Stage File Addition
+To stage a file or directory, use `git add`. This prepares changes to be committed.
+
 ```bash
 # Syntax
-$ git add <path>
+$ git add path_to_file_or_directory
 
 # Examples
-$ git add .
-$ git add afolder/
-$ git add f1
+$ git add .           # Stages all changes in the current directory
+$ git add adir/       # Stages changes in the "adir" directory
+$ git add f1          # Stages the "f1" file
 ```
 
-### **Stage file deletion** (without removing the file from the working directory):
+#### Stage File Deletion (Without Removing the File from the Working Directory)
+To stage the removal of a file or directory, but keep it in the working directory, use `git rm --cached`. This removes the file from the staging area but leaves it in your local file system.
+
 ```bash
 # Syntax
-$ git rm --cached <file>
+$ git rm [-r] --cached file_or_directory
 
 # Examples
-$ git rm --cached f1
-$ git rm -r --cached afolder/
+$ git rm --cached f1               # Stages the removal of the file "f1"
+$ git rm -r --cached afolder/      # Stages the removal of the "afolder" directory
 ```
-#### **What happens if you simply do `git rm` or `rm`?**
+
+#### Using `git rm` on a Staged File:
+
 ```bash
-# trying to use "git rm" on staged f1
+# Trying to use "git rm" on a staged file (f1)
 $ git rm f1
 error: the following file has changes staged in the index:
     f1
 (use --cached to keep the file, or -f to force removal)
+```
+This shows that you can't use `git rm` directly on a staged file unless you either:
+1. Use the `--cached` option to only remove the file from the staging area, or
+2. Use `-f` to force removal.
 
-# trying to use "git rm" on a tracked file afolder/f4
+#### Using `git rm` on a Tracked File:
+
+```bash
+# Trying to use "git rm" on a tracked file (afolder/f4)
 $ git rm afolder/f4
-rm 'afolder/f4'
-# removes the file from working directory and stages the removal
+rm 'afolder/f4'    
+```
+This removes the file from the working directory and **stages the removal**
 
+#### Using `rm` on a Staged File:
 
-# trying to use "rm" on staged f1
+```bash
+# Trying to use "rm" on a staged file (f1)
 $ rm f1
 
 $ git status
@@ -432,19 +452,23 @@ Changes not staged for commit:
   (use "git restore <file>..." to discard changes in working directory)
   deleted:    f1
 ```
+Here, `rm` removes the file from the working directory but doesn't unstage it. You’ll see the file listed under "Changes not staged for commit" in the `git status` output.
+
+---
 
 ### Inspecting the Stage
 
 #### Check the Status of the Repository:
-- To view the state of your repository and see which files are staged, modified, or untracked, use:
+To view the state of your repository and see which files are staged, modified, or untracked, use:
 ```bash
 $ git status
 ```
 
-##### Example Output:
+**Output**:
 - **Changes to be committed**: Files staged for commit.
 - **Changes not staged for commit**: Modified files that are not yet staged.
 - **Untracked files**: Files in the working directory that are not part of the repository.
+
 ```bash
 $ git status
 On branch master
@@ -462,11 +486,17 @@ Untracked files:
 	f2
 ```
 
+Here’s a clearer version of your explanation about viewing diffs in Git:
 
-#### **Diffs:**
-- To see **unstaged changes** (changes in the working directory):
+---
+
+### Viewing Diffs
+
+#### See Unstaged Changes
+To view changes made in your working directory (but not yet staged for commit), use the following command:
+
 ```bash
-# Syntax 
+# Syntax
 $ git diff
 
 # Example
@@ -478,8 +508,11 @@ index e69de29..3b18e51 100644
 @@ -0,0 +1 @@
 +hello world
 ```
+This shows the difference between your working directory and the last commit for unstaged files.
 
-- To see **staged changes** (changes in the staging area):
+#### See Staged Changes
+To view changes that have been staged for commit (but not yet committed), use the following command:
+
 ```bash
 # Syntax
 $ git diff --cached
@@ -493,40 +526,111 @@ index e69de29..3b18e51 100644
 @@ -0,0 +1 @@
 +hello world
 ```
+This shows the difference between the staged changes and the last commit.
 
-## **Commits**
+---
 
-### **What is a Commit?**
-- A **commit** is a snapshot of your project at a specific point in time, and it serves as an atomic unit in Git's version control.
-- Each commit contains:
-  - The **snapshot** of the entire project.
-  - **Author information** (name and email).
-  - The **commit message**.
-  - A **unique SHA-1 checksum** that ensures the commit cannot be unintentionally altered.
+Here’s a more readable and structured version of your content on commits:
 
-### **Commit Process:**
-- **Commit the staged snapshot** to the repository history:
+---
+
+## Commits
+
+### What is a Commit?
+A **commit** represents a snapshot of your project at a specific point in time and acts as an **atomic unit** in Git's version control. Each commit contains:
+
+- A **snapshot** of the entire project at the moment of committing.
+- **Author information** (name and email).
+- A **commit message** describing the changes.
+- A **unique SHA-1 checksum** to ensure the commit's integrity and prevent unintended changes.
+
+### Commit Process
+To create a commit, stage the changes first and then commit the snapshot to your repository’s history:
+
 ```bash
 $ git commit
 ```
-- You'll be prompted to provide a **commit message** in a text editor.
 
-### **Commit Message Format:**
-- **First line (summary)**: A brief description (50 characters or less).
-- **Second line**: Blank line.
-- **Following lines**: A detailed description of changes, reasons, or relevant ticket numbers.
+After running this command, you will be prompted to enter a **commit message** in your default text editor.
 
-Example:
+### Commit Message Format
+Follow this format when writing commit messages:
+
+1. **First Line (Summary)**: A brief description of the changes (50 characters or fewer).
+2. **Second Line**: Leave this line blank.
+3. **Following Lines**: A detailed explanation of the changes, reasons, or relevant ticket numbers.
+
+**Example**:
+
 ```plaintext
 Fixed bug in user authentication
 
 Detailed fix for user authentication issues, including validation errors
 and user session management.
 ```
-### **Commiting using options**
-- Commiting without opening default text editor.
+
+**Note**: If you have a hard time give a short description for a commit, then you should split the commit into many commits. You take help of staging area for this. You can have **logical snapshots** instead of just chronological snapshots. 
+
+---
+
+#### Commit Message Rules
+
+Short commit messages are typically used to provide a concise summary of changes. While they are brief, they should still follow best practices to ensure clarity and usefulness. Here are some rules for writing effective short commit messages:
+
+
+1. **Keep It Under 50 Characters**
+   - The message should fit within 50 characters for readability.
+   - If more detail is needed, use the body section in a longer commit message.
+
+2. **Use the Imperative Mood**
+   - Write as if giving a command.
+   - **Examples**:
+     - ✅ "Fix broken navbar links"
+     - ❌ "Fixed broken navbar links"
+
+3. **Focus on the "What"**
+   - Summarize what the change does, not how or why.
+   - **Examples**:
+     - ✅ "Add search bar to header"
+     - ❌ "Add code for implementing the search bar"
+
+4. **Avoid Noise**
+   - Do not use vague terms like "Updated files" or "Changes made."
+   - Be specific: "Remove unused imports" or "Optimize image loading."
+
+5. **Use Consistent Style**
+   - Maintain a uniform structure across all commits for consistency.
+   - Decide as a team or individually on a style guide (e.g., capitalization, tense).
+
+6. **Avoid Redundancy**
+   - Skip prefixes like "Commit:" or "Change:."
+   - The fact that it's a commit is implied.
+
+7. **No Periods at the End**
+   - Short commit messages do not require punctuation unless it's a complete sentence.
+
+8. **Use Tags (Optional)**
+   - For clarity in large projects, use a prefix or tag if helpful:
+     - `[Bugfix] Fix crash on login`
+     - `[UI] Update button styles`
+
+**Examples of Good Short Commit Messages**:
+- "Fix typo in README"
+- "Update dependencies"
+- "Add error handling for API calls"
+- "Remove deprecated methods"
+- "Refactor login logic"
+
+
+---
+
+
+### Committing Using Options
+
+You can skip the default text editor and directly provide a commit message using the `-m` option:
+
 ```bash
-# Sytnax
+# Syntax
 $ git commit -m "commit message"
 
 # Example
@@ -536,10 +640,28 @@ $ git commit -m "This is a commit message"
 create mode 100644 afile.txt
 ```
 
-### **Inspecting Commits**
+---
 
-#### **View Commit History:**
-- To see the list of commits in the current branch:
+### Inspecting Commits
+
+#### View Commit History:
+
+To view commit history for a specified branch, use the following command: 
+```bash
+# Syntax
+$ git log branch_name
+
+# Example
+$ git log main
+commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 17:56:52 2024 +0530
+
+    commit message
+```
+
+To see the list of commits in the current branch, use the following command:
+
 ```bash
 # Syntax
 $ git log
@@ -553,8 +675,11 @@ Date:   Sat Dec 28 17:56:52 2024 +0530
     commit message
 ```
 
-#### **Useful Options:**
-- **Single-line log** (brief):
+#### Useful Log Options:
+
+##### Single-Line Log (Brief View):
+To display the log in a brief, single-line format:
+
 ```bash
 # Syntax
 $ git log --oneline
@@ -564,12 +689,14 @@ $ git log --oneline
 cbd9be4 (HEAD -> master) commit message
 ```
 
-- **Log for a specific file**:
+##### Log for a Specific File:
+To view the log for a specific file, use:
+
 ```bash
 # Syntax
-$ git log [--oneline] <file>
+$ git log [--oneline] file_or_directory
 
-# Examples
+# Example
 $ git log afile.txt
 commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a (HEAD -> master)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
@@ -577,14 +704,14 @@ Date:   Sat Dec 28 17:56:52 2024 +0530
 
     commit message
 
-# Example
+# Example with oneline option
 $ git log --oneline afile.txt
 cbd9be4 (HEAD -> master) commit message
-
 ```
 
-- **Log for a specific range of commits**:
-- `<since>` commit is excluded and `<until>` commit is included. 
+##### Log for a Specific Range of Commits:
+To view commits between two points, use the following syntax. Note that the commit marked as **`<since>` is excluded**, while **`<until>` is included**.
+
 ```bash
 # Syntax
 $ git log <since>..<until>
@@ -609,7 +736,7 @@ Date:   Sat Dec 28 17:56:52 2024 +0530
 
     commit message
 
-# cbd9be4 is excluded but 169223b is included.
+# Exclude cbd9be4 and include 169223b
 $ git log cbd9be4..169223b
 commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
@@ -623,18 +750,18 @@ Date:   Sat Dec 28 18:03:24 2024 +0530
 
     changed file names
 
-# e09fdab is excluded but 169223b is included.
+# Exclude e09fdab and include 169223b
 $ git log e09fdab..169223b
 commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sat Dec 28 18:04:00 2024 +0530
 
     added some files in afolder
-
 ```
 
+##### Display a Diffstat (Summary of Changes in Each Commit):
+To show a diffstat summarizing the changes made in each commit, use:
 
-- **Display a diffstat** (changes made in each commit):
 ```bash
 # Syntax
 $ git log --stat
@@ -670,31 +797,43 @@ Date:   Sat Dec 28 17:56:52 2024 +0530
 
 a | 0
 1 file changed, 0 insertions(+), 0 deletions(-)
-
 ```
 
-#### **Visualizing History:**
-- Use `gitk` to visualize the commit history graphically (available as a separate program).
+#### Visualizing History:
+For a graphical view of the commit history, use the `gitk` tool, which is available as a separate program:
+
+It is not installed by default. To install: 
+```bash
+$ sudo apt update
+$ sudo apt install gitk -y
+```
+
+To launch gitk, just type `gitk`, which will open a GUI: 
 ```bash
 $ gitk
 ```
 
-## **Tagging Commits**
+--- 
 
-### **What are Tags?**
-- Tags are **pointers** to specific commits, useful for marking important points in the project's history, such as release versions.
+## Tagging Commits
 
+### What are Tags
+Tags in Git are **pointers** to specific commits. They are **lightweight markers** that help you highlight important points in your project's history, such as release versions.
 
-### **Creating a Tag**  
-* To create a lightweight tag on the commit you are sitting on:  
+### Creating a Tag
+To create a tag on the current commit, use the following syntax:
+
 ```bash
 # Syntax
 $ git tag <tag_name>
 
 # Example
 $ git tag v1.0
+```
 
-# notice the end of commit 169223b
+After creating the tag, you can see it in the commit log:
+
+```bash
 $ git log
 commit 169223b27b5039d1d69b83889dd14e776891e9a1 (HEAD -> master, tag: v1.0)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
@@ -707,14 +846,10 @@ Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sat Dec 28 18:03:24 2024 +0530
 
     changed file names
-
-commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 17:56:52 2024 +0530
-
-    commit message
+...
 ```
-* Adding a commit and printing the log, we can see tag stays behind.
+
+If you add a new commit, the tag will **remain with the previous commit**:
 
 ```bash
 $ git log
@@ -729,27 +864,23 @@ Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sat Dec 28 18:04:00 2024 +0530
 
     added some files in afolder
-
-commit e09fdab287149a6c6a4c176b8c4a40df15284abd
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:03:24 2024 +0530
-
-    changed file names
-
-commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 17:56:52 2024 +0530
-
-    commit message
+...
 ```
 
-* To create an annotated tag with a message:  
+### Creating an Annotated Tag
+To create an **annotated tag** (a tag with a message), use the following syntax:
+
 ```bash
 # Syntax
 $ git tag -a <tag_name> -m "Tag Message"
 
 # Example
 $ git tag -a v2.0 -m "Initial release"
+```
+
+You can verify the tag in the commit log:
+
+```bash
 $ git log
 commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
@@ -763,21 +894,13 @@ Date:   Sat Dec 28 18:04:00 2024 +0530
 
     added some files in afolder
 
-commit e09fdab287149a6c6a4c176b8c4a40df15284abd
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:03:24 2024 +0530
-
-    changed file names
-
-commit cbd9be4bb54c7573ff55d8826d8b1ea7582a2d0a
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 17:56:52 2024 +0530
-
-    commit message
+...
 ```
+---
 
-### **Listing Tags**  
-* To see all tags in the repository:  
+### Listing Tags
+To list all tags in the repository, use:
+
 ```bash
 # Syntax
 $ git tag
@@ -788,28 +911,32 @@ v1.0
 v2.0
 ```
 
-### **Pushing Tags to Remote**  
-* By default, tags are not pushed to remote. Push a specific tag:  
+### Pushing Tags to Remote
+By default, **tags are not automatically pushed** to the remote repository. To push a specific tag, use:
+
 ```bash
 # Syntax 
 $ git push origin <tag_name>
 ```
 
-To push all tags:  
+To **push all tags** at once:
+
 ```bash
 # Syntax
 $ git push --tags
 ```
 
-### **Viewing a Tag**  
-* To see details of a tag:  
+### Viewing a Tag
+To view the details of a tag, use the following command:
+
 ```bash
 # Syntax
 $ git show <tag_name>
 ```
-#### Examples
 
-* Normal tag
+#### Normal Tag
+For a normal tag, this command will show details like the commit associated with the tag:
+
 ```bash
 $ git show v1.0
 commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
@@ -826,7 +953,9 @@ new file mode 100644
 index 0000000..e69de29
 ```
 
-* Annotated tag
+#### Annotated Tag
+For an annotated tag, additional information like the tagger's name and the tag message is included:
+
 ```bash
 $ git show v2.0
 tag v2.0
@@ -847,14 +976,20 @@ rename from afile.txt
 rename to f1
 ```
 
-### **Using Tags for Checkout**  
-* To checkout a specific tag (in a detached HEAD state):  
+### Using Tags for Checkout
+To check out a specific tag (in a detached HEAD state), use the following:
+
 ```bash
 # Syntax
 $ git checkout <tag_name>
 
 # Example
-$ git checkout v1.0 
+$ git checkout v1.0
+```
+
+The output will look like this, **it's worth to take and read and follow it**. :
+
+```bash
 Note: switching to 'v1.0'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
@@ -875,11 +1010,13 @@ Turn off this advice by setting config variable advice.detachedHead to false
 HEAD is now at 169223b added some files in afolder
 ```
 
+---
+
 ## Summary of Commands:
-| Command                               | Description                                                                                         |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `git add`                             | Stages all changes in the working directory for the next commit.                                   |
-| `git add file/folder`                 | Stages specific files or folders for the next commit.                                              |
+| Command                               | Description                                                                                       |
+|---------------------------------------|---------------------------------------------------------------------------------------------------|
+| `git add`                             | Stages all changes in the working directory for the next commit.                                  |
+| `git add file/folder`                 | Stages specific files or folders for the next commit.                                             |
 | `git rm`                              | Removes files from the working directory and stages the deletion for the next commit.             |
 | `git rm --cached file`                | Removes a file from the staging area without deleting it from the working directory.              |
 | `git rm -r --cached folder`           | Removes a folder from the staging area without deleting it from the working directory.            |
@@ -888,18 +1025,22 @@ HEAD is now at 169223b added some files in afolder
 | `git diff --cached`                   | Displays changes staged for the next commit.                                                      |
 | `git commit`                          | Commits staged changes to the repository.                                                         |
 | `git commit -m "commit message"`      | Commits staged changes with a descriptive message in a single step.                               |
+| `git log branch_name`                 | Displays the commit history of the repository for the specified branch.                           |
 | `git log`                             | Displays the commit history of the repository.                                                    |
 | `git log --oneline`                   | Shows a concise commit history with one commit per line.                                          |
 | `git log --oneline file/folder`       | Shows a concise commit history for a specific file or folder.                                     |
-| `git log <since>..<until>`            | Displays commits between two references (e.g., tags, branches), with `<since>` being exclusive.    |
+| `git log <since>..<until>`            | Displays commits between two references (e.g., tags, branches), with `<since>` being exclusive.   |
 | `git log --stat`                      | Shows commit history along with a summary of changes made in each commit.                         |
 | `git tag tag_name`                    | Creates a lightweight tag for the current commit.                                                 |
-| `git tag -a tag_name -m "tag message"` | Creates an annotated tag with a message for the current commit.                                   |
+| `git tag -a tag_name -m "tag message"`| Creates an annotated tag with a message for the current commit.                                   |
 | `git tag`                             | Lists all tags in the repository.                                                                 |
 | `git push origin tag_name`            | Pushes a specific tag to the remote repository.                                                   |
 | `git push --tags`                     | Pushes all tags to the remote repository.                                                         |
 | `git show tag_name`                   | Displays details of a specific tag, including the commit it references.                           |
 | `git checkout tag_name`               | Checks out a specific tag, detaching the HEAD to a read-only state.                               |
+| `gitk`                                | Opens a graphical tool to visualize the commit history.                                           |
+
+---
 
 # Undoing Changes
 
