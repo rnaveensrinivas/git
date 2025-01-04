@@ -346,7 +346,7 @@ $ git push
 $ git config --global url."git@github.com:".insteadOf "https://github.com/"
 ```
 
-## Summary of Commands
+## Summary of Git Configuration and Setup Commands
 | Command  | Description |
 |----------|-------------|
 | `git config --global user.name "name"`| Sets the global Git username for all repositories.|
@@ -1012,7 +1012,7 @@ HEAD is now at 169223b added some files in afolder
 
 ---
 
-## Summary of Commands:
+## Summary of Recording Changes Commands:
 | Command                               | Description                                                                                       |
 |---------------------------------------|---------------------------------------------------------------------------------------------------|
 | `git add`                             | Stages all changes in the working directory for the next commit.                                  |
@@ -1043,20 +1043,22 @@ HEAD is now at 169223b added some files in afolder
 ---
 
 # Undoing Changes
+What's the point of having commits when you don't have the ability to undo changes? Git provides tools to undo changes at various stages, allowing you to correct mistakes or discard experiments without fear of breaking your code. These tools can help you reset the **working directory**, **staging area**, or even undo an **entire commit**.
 
-## **Importance of Undoing:**
-- Undoing changes allows you to correct mistakes or experiments without fear of breaking the code.
-- Git provides tools to undo changes at different stages: working directory, staging area, and commits.
+---
 
-## **Undoing can mean:**
-  - Undo changes in the **working directory**.
-  - Undo changes in the **staging area**.
-  - Undo an **entire commit**.
+## What Does Undoing Changes Mean?
 
-## **Undoing in the Working Directory**
+- **Working Directory**: Reverting changes made to files before staging.
+- **Staging Area**: Removing changes staged for a commit.
+- **Commits**: Reverting or amending an entire commit.
 
-### **Reset to the Last Commit:**
-- To discard all uncommitted changes (both in working directory and staging area), use:
+---
+
+## Undoing Changes in the Working Directory
+
+### Reset to the Last Commit
+To discard all uncommitted changes (in both the working directory and staging area), use:
 ```bash
 # Syntax
 $ git reset --hard HEAD
@@ -1065,175 +1067,190 @@ $ git reset --hard HEAD
 $ git status
 On branch master
 Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-	deleted:    afolder/f4
-	modified:   f1
+  deleted:    afolder/f4
+  modified:   f1
 
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   afolder/f3
+  modified:   afolder/f3
 
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	commands
-	f2
+  commands
+  f2
 
-# Reseting working directory and staging area to most recent commit
+# Resetting the working directory and staging area to the last commit
 $ git reset --hard HEAD
 HEAD is now at 8325a85 changed file name
 
 $ git status
 On branch master
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	commands
-	f2
-
+  commands
+  f2
 nothing added to commit but untracked files present (use "git add" to track)
 ```
-- `git reset --hard HEAD` resets the working directory and staging area to the state of the **most recent commit** (HEAD).
-* Since Git doesn't store untracked files, it does nothing to them. 
-* To remove untracked files, use: 
+
+#### Key Points:
+- `git reset --hard HEAD`: Resets the working directory and staging area to match the last commit.
+- **Untracked Files**: Not affected by this command.
+
+#### Remove Untracked Files
+To delete untracked files:
 ```bash
 # Syntax
 $ git clean -f
 
 # Example
 $ git status
-On branch master
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	commands
-	f2
+  commands
+  f2
 
-nothing added to commit but untracked files present (use "git add" to track)
-
-# Clearning untracked files
+# Removing untracked files
 $ git clean -f
 Removing commands
 Removing f2
 
 $ git status
-On branch master
 nothing to commit, working tree clean
 ```
-- `git clean -f` removes **untracked files** (files that Git is not tracking).
-- The **-f** flag is required to force deletion of untracked files.
 
-### **Undo Changes to a Specific File:**
-- To revert a single file (file could be in **working directory** or **staging area**) to the version from the last commit:
+##### Key Points:
+- `git clean -f`: Deletes untracked files from the working directory.
+- **Force Option (`-f`)**: Required to confirm deletion of untracked files.
+
+---
+
+### Undo Changes to a Specific File
+To restore a specific file to its state in the last commit:
 ```bash
 # Syntax
 $ git checkout HEAD <file>
 
 # Example
 $ git status
-On branch master
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   afolder/f2
-	modified:   f1
+  modified:   afolder/f2
+  modified:   f1
 
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	f
+  f
 
-no changes added to commit (use "git add" and/or "git commit -a")
-
-# Reverting f1 to previous commit state
+# Reverting `f1` to the state of the last commit
 $ git checkout HEAD f1
 Updated 1 path from dd3c5af
 
 $ git status
-On branch master
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   afolder/f2
+  modified:   afolder/f2
 
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	f
-
-no changes added to commit (use "git add" and/or "git commit -a")
+  f
 ```
 
-- This will replace the file in your working directory with the version from **HEAD**, without altering the project history.
+#### Key Points
+- Replaces the file in the working directory with the version from **HEAD** (last commit).
+- Does not affect untracked files or project history.
 
-## **Undoing in the Staging Area**
+---
 
-### **Unstage Changes:**
-- If you accidentally stage a file, you can unstage it with:
+## Undoing in the Staging Area
+
+When a file is mistakenly added to the staging area, you can unstage it without affecting the changes in your working directory.
+
+To remove a file from the staging area: 
 ```bash
 $ git reset HEAD <file>
 ```
 
-- This command removes the file from the staging area but leaves your working directory unchanged, resulting in an unstaged modification.
+### Key points
+* **Effect**: Moves the file from the staging area back to the working directory as an **unstaged change**.
+* **Working Directory**: The file remains unchanged, preserving your modifications.
+* This action is non-destructive, making it safe for recovering from accidental staging.
 
-## **Undoing Commits**
 
-### **Two Ways to Undo Commits:**
+### What is the difference between `reset HEAD file` and `rm --cached file`?
+
+| Command                   | Purpose                                    | Effect on Working Directory | Effect on Repository |
+|---------------------------|--------------------------------------------|-----------------------------|-----------------------|
+| `git reset HEAD <file>` | Unstages a file without deleting it.      | **Keeps the file unchanged**. | File remains tracked in the repository. |
+| `git rm --cached <file>` | Removes a file from the repository's index (staging area) but leaves it in the working directory. | **Keeps the file intact** but marks it as untracked. | File is no longer tracked in the repository. |
+
+### Key Differences:
+
+1. **Use Case**:
+   - `git reset HEAD <file>`: Used to **unstage changes** that were added with `git add` but not yet committed.
+   - `git rm --cached <file>`: Used to **stop tracking a file** entirely, often for files that were mistakenly added to the repository (like large binaries or sensitive data).
+
+2. **Impact on Tracking**:
+   - `git reset HEAD <file>`: The file remains **tracked**; only its staging status changes.
+   - `git rm --cached <file>`: The file is **untracked** by Git but stays in your working directory.
+
+3. **Practical Example**:
+   - `git reset HEAD example.txt`: Reverts `example.txt` from the staging area to the working directory, keeping it tracked for future commits.
+   - `git rm --cached example.txt`: Stops tracking `example.txt` entirely but leaves it in the working directory as an untracked file.
+
+
+## Undoing Commits
+
+**Two Ways to Undo Commits**:
 1. **Reset**: Removes a commit entirely from the history.
 2. **Revert**: Creates a new commit that undoes the changes of a previous commit.
 
-### **1. Resetting Commits:**
-- **git reset** is used to move the `HEAD` reference and remove a commit from the history:
-#### Reseting the most recent commit
+### Resetting Commits
+
+The `git reset` command is used to move the `HEAD` pointer to a specific commit, effectively removing commits from the history. Depending on the mode, it can also preserve or discard changes.
+
+The syntax for resetting the commits is as follows: 
 ```bash
-# Syntax
-$ git reset HEAD~<NUM> 
-
-# Example
-$ git log
-commit bdab6c6e81cb82dd603db485c5e41c564a210dde (HEAD -> master)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:37:31 2024 +0530
-
-    bad commit
-
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
-
-commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:04:00 2024 +0530
-
-    added some files in afolder
-
-... 
-
-# Undoing the previous commit
-$ git reset HEAD~1
-Unstaged changes after reset:
-M	afolder/f2
-
-$ git log
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
-
-commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:04:00 2024 +0530
-
-    added some files in afolder
+$ git reset HEAD~<number>
 ```
 
-- `HEAD~1` refers to the commit before the most recent commit (`HEAD`). This command moves `HEAD` backward, removing the most recent commit.
-- We can move many commits back by using `HEAD~<NUM>` eg `HEAD~3`, to move three commits backward. 
+#### Resetting the Most Recent Commit
+
+The syntax for resetting the most recent commit is as follows: 
+```bash
+$ git reset HEAD~1
+```
+
+##### Example: Undo the Most Recent Commit
+1. **Check Commit History**:
+   ```bash
+   $ git log
+   commit bdab6c6e81cb82dd603db485c5e41c564a210dde (HEAD -> master)
+   Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+   Date:   Sun Dec 29 05:37:31 2024 +0530
+
+       bad commit
+
+   commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
+   Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+   Date:   Sat Dec 28 18:19:52 2024 +0530
+
+       changed file name
+   ```
+
+2. **Undo the Most Recent Commit**:
+   ```bash
+   $ git reset HEAD~1
+   Unstaged changes after reset:
+   M    afolder/f2
+   ```
+
+3. **Verify the New History**:
+   ```bash
+   $ git log
+   commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
+   Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+   Date:   Sat Dec 28 18:19:52 2024 +0530
+
+       changed file name
+   ```
 
 ---
 
-#### Resetting to a Previous Commit in Git
+#### Resetting to a Specific Commit
 
-To reset your repository to a specific commit in the past, follow these steps. Consider the current commit history:
+You can reset your repository to any commit in the history. Consider the following commit log:
 
 ```bash
 $ git log
@@ -1242,10 +1259,140 @@ Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sun Dec 29 05:58:47 2024 +0530
 
     updated f1
-    
     fixed a typo in f1
 
-commit 442f724d702b6ac5199bfe80de8e08009b737019
+... # bunch of commits
+
+commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:19:52 2024 +0530
+
+    changed file name
+```
+
+To reset your repository to `tag: v2.0`, there are **two options**:
+
+---
+
+##### Option 1: `git reset --soft`
+
+1. **Command**:
+   ```bash
+   $ git reset --soft 8325a854   # Or git reset --soft v2.0
+   ```
+
+2. **Effect**:
+   - Moves `HEAD` to `tag: v2.0`.
+   - Removes all commits after `tag: v2.0`.
+   - Preserves the changes from deleted commits and stages them.
+
+3. **Example**:
+   ```bash
+   $ git reset --soft 8325a854
+
+   $ git log
+   commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
+   Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+   Date:   Sat Dec 28 18:19:52 2024 +0530
+
+       changed file name
+
+   $ git status # notice how the deleted commit's changes are in staged.
+   Changes to be committed:
+     (use "git restore --staged <file>..." to unstage)
+     modified:   f1
+   ```
+
+---
+
+##### Option 2: `git reset --hard`
+
+1. **Command**:
+   ```bash
+   $ git reset --hard 8325a854   # Or git reset --hard v2.0
+   ```
+
+2. **Effect**:
+   - Moves `HEAD` to `tag: v2.0`.
+   - Removes all commits after `tag: v2.0`.
+   - Discards all changes from deleted commits, without saving them.
+
+3. **Example**:
+   ```bash
+   $ git reset --hard 8325a854
+   HEAD is now at 8325a85 changed file name
+   ```
+
+---
+
+#### Key Points
+
+1. **`HEAD~<number>`**: Refers to a specific number of commits back from the current `HEAD`.  
+   - Example: `HEAD~3` moves 3 commits back.
+
+2. **Modes of Reset**:
+   - **Soft**: Keeps changes from deleted commits and stages them.
+   - **Mixed (default)**: Keeps changes from deleted commits but unstages them.
+   - **Hard**: Discards all changes from deleted commits.
+
+3. **Rewriting History**:
+   - Resetting rewrites commit history, which can lead to issues in collaborative projects if the commits have been shared. Use with caution!
+
+4. **Safe Usage**:
+   - Reset private commits that haven’t been pushed.
+   - Avoid resetting shared commits to prevent conflicts.
+- 
+### Reverting Commits
+
+The `git revert` command is a safer alternative to `git reset`, particularly in public repositories. Instead of rewriting commit history, it **creates a new commit that reverses the changes introduced by a commit**.
+
+```bash
+$ git revert <commit-id>
+```
+
+---
+
+#### Example: Reverting the Most Recent Commit
+
+##### Step 1: Check the Commit History
+```bash
+$ git log
+commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6 (HEAD -> master)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sun Dec 29 05:42:51 2024 +0530
+
+    bad commit
+
+commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
+Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
+Date:   Sat Dec 28 18:19:52 2024 +0530
+
+    changed file name
+```
+
+##### Step 2: Revert the Commit
+```bash
+$ git revert HEAD
+hint: Waiting for your editor to close the file...
+```
+
+This opens the editor for a commit message. The default message typically includes the reverted commit details:
+
+```plaintext
+Revert "bad commit"
+
+This reverts commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6.
+```
+
+- Edit the message as needed and close the editor.  
+- Once the editor is closed, the revert operation completes.
+
+---
+
+#### Step 3: Verify the Revert
+```bash
+$ git log
+commit 442f724d702b6ac5199bfe80de8e08009b737019 (HEAD -> master)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sun Dec 29 05:47:13 2024 +0530
 
@@ -1260,230 +1407,78 @@ Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sun Dec 29 05:42:51 2024 +0530
 
     bad commit
-
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
-
-commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:04:00 2024 +0530
-
-    added some files in afolder
 ```
 
-We want to **reset the repository to `tag: v2.0`**, removing all commits after it. There are two ways to accomplish this:
+
+#### Key Features of `git revert`
+
+1. **Does Not Rewrite History**:
+   - Unlike `git reset`, which modifies the commit history, `git revert` creates a new commit that cancels out the changes of the specified commit.
+
+2. **Safe for Public Repositories**:
+   - Since it avoids altering history, `git revert` is ideal for projects where multiple people are working collaboratively.
+
+3. **Works on Specific Commits**:
+   - You can revert any commit in the history, not just the latest one. Simply replace `HEAD` with the appropriate `<commit-id>`.
+
+4. **Interactive Editor**:
+   - The revert process opens a text editor for the new commit message. You can customize it or leave the default message.
 
 ---
 
-##### Option 1: `git reset --soft`
+
+## Amending Commits
+
+Amending a commit allows you to **modify the most recent commit**, whether to include forgotten changes or fix the commit message. The syntax for ammending a commit: 
 ```bash
-$ git reset --soft 8325a854   # Or git reset --soft v2.0
-```
-
-- **What it does**:
-  - Resets the repository to the specified commit (`tag: v2.0` in this case).
-  - Deletes all commits made after `tag: v2.0`.
-  - **Preserves changes** introduced by deleted commits and stages them for the next commit.
-
-- **Example**:
-  ```bash
-  $ git reset --soft 8325a854
-
-  $ git log
-  commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (HEAD -> master, tag: v2.0)
-  Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-  Date:   Sat Dec 28 18:19:52 2024 +0530
-
-      changed file name
-
-  commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
-  Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-  Date:   Sat Dec 28 18:04:00 2024 +0530
-
-      added some files in afolder
-
-  # Files from deleted commits are now staged
-  $ git status
-  On branch master
-  Changes to be committed:
-    (use "git restore --staged <file>..." to unstage)
-    modified:   f1
-  ```
-
----
-
-##### Option 2: `git reset --hard`
-```bash
-$ git reset --hard 8325a854   # Or git reset --hard v2.0
-```
-
-- **What it does**:
-  - Resets the repository to the specified commit (`tag: v2.0` in this case).
-  - Deletes all commits made after `tag: v2.0`.
-  - **Discards all changes** introduced by deleted commits without saving them.
-
-- **Example**:
-  ```bash
-  $ git reset --hard 8325a854
-  HEAD is now at 8325a85 changed file name
-  ```
-
----
-
-### ⚠️ Important Notes
-
-1. **Resetting rewrites history**:
-   - This can lead to issues in **collaborative projects**, especially if the commits have been shared with others.
-
-2. **Safe Use Cases**:
-   - It's safe to reset **private commits** (commits only in your local repository).
-   - Avoid resetting commits that others rely on to prevent conflicts.
-
---- 
-
-### **2. Reverting Commits:**
-- **git revert** is a safer alternative to `git reset`, especially in public repositories:
-```bash
-# Syntax
-$ git revert <commit-id>
-
-# Example
-$ git log
-commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6 (HEAD -> master)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:42:51 2024 +0530
-
-    bad commit
-
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
-
-commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:04:00 2024 +0530
-
-... 
-
-# Reverting
-$ git revert HEAD
-hint: Waiting for your editor to close the file... 
-```
-
-```bash
-Revert "bad commit"
-
-This reverts commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6.
-
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be ignored, and an empty message aborts the commit.
-#
-# On branch master
-# Changes to be committed:
-#	new file:   afolder/f2
-#
-Changeg the file by mistake
-```
-* type the comment and close the file.
-* As soon as you do that, the  `hint:` goes away.
-```bash
-$ git revert HEAD
-[master 442f724] Revert "bad commit"
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 afolder/f2
-
-$ git log
-commit 442f724d702b6ac5199bfe80de8e08009b737019 (HEAD -> master)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:47:13 2024 +0530
-
-    Revert "bad commit"
-    
-    This reverts commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6.
-    
-    Changeg the file by mistake
-
-commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:42:51 2024 +0530
-
-    bad commit
-
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
-
-commit 169223b27b5039d1d69b83889dd14e776891e9a1 (tag: v1.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:04:00 2024 +0530
-
-    added some files in afolder
-```
-
-- **Ideal for public repositories**, as it doesn't rewrite history but introduces a new commit that "cancels out" previous changes.
-
-
-## **Amending Commits**
-
-### **Amend the Most Recent Commit:**
-- If you want to modify the most recent commit (e.g., to add forgotten changes or fix the commit message), use:
-```bash
-# Syntax
 $ git commit --amend
+```
 
-# Example
-$ ls
-afolder  f1
+### Example Workflow:
 
+#### 1. Initial Commit:
+Let's intentionally make a mistake and commit it. 
+```bash
+# Making a mistake. 
 $ echo "hello wordl" > f1
 
-$ git add . ; git commit -m "updated f1"
-[master 53932d1] updated f1
- 1 file changed, 1 insertion(+)
+# Commiting it. 
+$ git add .
+$ git commit -m "update f1"
+[master 53932d1] update f1
+1 file changed, 1 insertion(+)
+```
 
+#### 2. Check Commit History:
+```bash
 $ git log
 commit 53932d1315f14a3a0bff75f24918848fc71b598c (HEAD -> master)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sun Dec 29 05:58:47 2024 +0530
 
-    updated f1
-
-commit 442f724d702b6ac5199bfe80de8e08009b737019
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:47:13 2024 +0530
-
-    Revert "bad commit"
-    
-    This reverts commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6.
-    
-    Changeg the file by mistake
-
-commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:42:51 2024 +0530
-
-    bad commit
-
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
-
-$ echo "hello world" > f1
-$ git add . ; git commit --amend
-hint: Waiting for your editor to close the file... 
+   update f1
+...
 ```
-* opens COMMIT_EDITOR file
+
+#### 3. Make Corrections:
+
+Fix the typo in `f1`:
+
 ```bash
-updated f1
+$ echo "hello world" > f1
+$ git add .
+```
+
+Amend the commit:
+
+```bash
+$ git commit --amend
+hint: Waiting for your editor to close the file...
+```
+
+This opens the COMMIT_EDITOR, showing the current commit message:
+```plaintext
+update f1
 
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
@@ -1492,68 +1487,53 @@ updated f1
 #
 # On branch master
 # Changes to be committed:
-#	modified:   f1
+#    modified:   f1
 #
-fixed a typo in f1
+fix typo in f1
 ```
-* As soon as you close the file, 
+Edit the message if needed and save the file.
+
+#### 4. Result:
 ```bash
-$ git add . ; git commit --amend
-[master 173d36d] updated f1
- Date: Sun Dec 29 05:58:47 2024 +0530
- 1 file changed, 1 insertion(+)
+# After closing the COMMIT_EDITOR windows:
+[master 173d36d] update f1
+Date: Sun Dec 29 05:58:47 2024 +0530
+1 file changed, 1 insertion(+)
 
 $ git log
 commit 173d36dddfc4c474ac38135f95dd00bb377ed9e8 (HEAD -> master)
 Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
 Date:   Sun Dec 29 05:58:47 2024 +0530
 
-    updated f1
+   update f1
     
-    fixed a typo in f1
-
-commit 442f724d702b6ac5199bfe80de8e08009b737019
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:47:13 2024 +0530
-
-    Revert "bad commit"
-    
-    This reverts commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6.
-    
-    Changeg the file by mistake
-
-commit e4a9e9928f1648638e3292f5d0a36934ff18ecd6
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sun Dec 29 05:42:51 2024 +0530
-
-    bad commit
-
-commit 8325a85452c5f8c2d2c6559e2cc055a1cce116ac (tag: v2.0)
-Author: rnaveensrinivas <rnaveensrinivas@gmail.com>
-Date:   Sat Dec 28 18:19:52 2024 +0530
-
-    changed file name
+   fix typo in f1
 ...
 ```
 
-- This replaces the previous commit with a new one, which is useful if you need to tweak the latest commit without creating a new one.
+### Key Points:
+- **Purpose**: Replaces the previous commit with a new one, incorporating changes to the message or content without creating a new commit.
+- **Rewriting History**: Amending a commit changes its hash. **Avoid amending commits that have already been pushed or shared**, as this can cause issues for collaborators.
 
-- **Caution**: This also rewrites history, so avoid amending commits that have already been shared with others.
 
 ## Summary of commands
 
 | **Command**| **Description**|
 |------------|----------------|
 | `git reset --hard HEAD`| Resets the working directory to the state of the last commit.|
-| `git clean -f`| Deletes untracked files from the working directory.|
+| `git clean -f`| **Deletes untracked files** from the working directory.|
 | `git checkout HEAD <file>`| Reverts a specific file to its state in the last commit.|
-| `git reset HEAD <file>`| Removes a file from the staging area, leaving its changes in the working directory. |
+| `git reset HEAD <file>`| Removes a file from the staging area, **leaving its changes in the working directory**. |
+| `git rm --cached <file>`| Removes a file from the staging area, removing it from the repository and make it **untracked**. |
+| `git reset HEAD~<number>`| Removes commits until the number from history and keeps its changes in the working directory. |
 | `git reset HEAD~1`| Removes the last commit from history and keeps its changes in the working directory. |
-| `git reset --hard <commit-id>`| Resets to a specific commit, discarding all changes after it.|
-| `git reset --soft <commit-id>`| Resets to a specific commit, keeping changes staged but removing subsequent commits. |
+| `git reset --hard <commit-id>`| Resets to a specific commit, **discarding all changes** after it.|
+| `git reset --soft <commit-id>`| Resets to a specific commit, **keeping changes staged** but removing subsequent commits. |
 | `git revert <commit-id>`| Creates a new commit that reverses the changes made by a specific commit.|
+| `git revert HEAD`| Creates a new commit that reverses the changes made by a most recent commit.|
 | `git commit --amend`| Edits the most recent commit message or adds changes to it.|
 
+---
 
 # Branches
 
