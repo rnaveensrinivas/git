@@ -116,7 +116,7 @@ Version control is a system that **tracks changes to files over time**, enabling
 ### 2. The Staging Area
 - **What It Is:**
   - The **staging area** acts as an intermediary between the **working directory** and the **project history**.
-  - It allows you to prepare and organize changes before committing them to the history.
+  - It allows you to **prepare and organize changes before committing** them to the history.
 
 - **Functionality:**
   - Instead of committing all changes at once, Git allows you to **group related changes** into a **changeset**.
@@ -138,7 +138,8 @@ Version control is a system that **tracks changes to files over time**, enabling
 
 ### 4. Development Branches
 - **What They Are:**
-  - Branches allow you to **fork the project history** and develop multiple features in **parallel**.
+  - Branches allow you to **fork the project history** and develop multiple features in **parallel**. 
+  - Facilitates non linear project history.
   - A branch creates a divergent path for your work, enabling you to develop **independently** without disrupting the main project history.
 
 - **Git Branches vs. Centralized Systems:**
@@ -146,9 +147,7 @@ Version control is a system that **tracks changes to files over time**, enabling
   - Unlike centralized version control systems, **Git branches** are **easy to share** and manage.
 
 - **Branching in Git:**
-  - Git branches are commonly used for:
-    - **Long-running features** with multiple contributors.
-    - **Quick fixes** (e.g., 5-minute patches).
+  - Git branches are used for everything from **long-running** features involving multiple contributors and to quick fixes, such as **5-minute patches**.
   - Many developers prefer to work in **dedicated topic branches**, keeping the main history branch (e.g., `main` or `master`) clean and reserved for **public releases**.
 
 ---
