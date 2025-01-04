@@ -12,32 +12,33 @@
 
 ## Introduction to Version Control
 
-- **Definition**: Version control is a system that tracks changes to files over time, enabling collaboration and version management.
+### Definition:
+Version control is a system that **tracks changes to files over time**, enabling collaboration and version management.
 
-- **Key Benefits**:
-  - Maintains a **history of changes**, allowing you to view or revert to earlier versions.
-  - Facilitates **collaboration** by letting multiple people work on the same project simultaneously.
-  - Tracks **who made what changes** and when, providing accountability.
-  - Reduces risk by serving as a **backup system** for your code or files.
+### Key Benefits:
+- Maintains a **history of changes**, allowing you to view or revert to earlier versions.
+- Facilitates **collaboration** by letting multiple people work on the same project simultaneously.
+- Tracks **who made what changes and when**, providing accountability.
+- Reduces risk by serving as a **backup system** for your code or files.
 
-- **Types of Version Control**:
-  - **Local Version Control**: Stores changes on a single machine. Simple but limited for collaboration.
-  - **Centralized Version Control**: Uses a central server to store files and version history (e.g., SVN, CVS).
-  - **Distributed Version Control**: Each user has a complete copy of the repository (e.g., Git, Mercurial).
+### Types of Version Control:
+- **Local Version Control**: Stores changes on a single machine. Simple but limited for collaboration.
+- **Centralized Version Control**: Uses a central server to store files and version history (e.g., SVN, CVS).
+- **Distributed Version Control**: Each user has a complete copy of the repository (e.g., Git, Mercurial).
 
-- **Common Use Cases**:
-  - Software development (code management).
-  - Document versioning and collaborative editing.
-  - Managing configuration files and scripts.
+### Common Use Cases:
+- Software development (code management).
+- Document versioning and collaborative editing.
+- Managing configuration files and scripts.
 
-- **Popular Tools**:
-  - Git, Mercurial, Subversion (SVN), CVS.
-  - Hosting services like GitHub, GitLab, and Bitbucket simplify sharing and collaboration.
+### Popular Tools:
+- Git, Mercurial, Subversion (SVN), CVS.
+- Hosting services like GitHub, GitLab, and Bitbucket simplify sharing and collaboration.
 
-- **Why It’s Essential**:
-  - Helps avoid overwriting others' work.
-  - Enables parallel development.
-  - Provides a safety net against accidental data loss or errors.
+### Why It's Essential:
+- Helps avoid overwriting others' work.
+- Enables **parallel development**.
+- Provides a **safety net** against accidental data loss or errors.
 
 ## Centralized vs. Distributed Version Control
 
@@ -45,7 +46,7 @@
 - **How It Works**:
   - A single **central repository** stores all project files and version history.
   - Developers pull files from the central server, make changes, and push them back.
-- **Examples**: Subversion (SVN), CVS.
+- **Examples**: Subversion (SVN), CVS.  
 - **Key Features**:
   - **Single Point of Truth**: The central server holds all the data.
   - **Network Dependency**: You need to be connected to the server for most operations.
@@ -88,6 +89,7 @@
    - Since each developer has their own local history, their development branches may diverge.
    - Git excels in handling **divergent histories**, making it **highly efficient** at **merging branches** and resolving conflicts between different lines of development.
 
+---
 
 # Git Components
 
@@ -106,8 +108,8 @@
   - You can treat the working directory as a **normal folder** where you directly modify the contents of the project.
 
 - **Git's Role:**
-  - The working directory gives you access to Git’s features, enabling you to **record changes**, **alter** files, and **transfer** them using Git commands.
-  - Git keeps track of any changes you make in this directory before committing them to the project’s history.
+  - The working directory gives you access to Git's features, enabling you to **record changes**, **alter** files, and **transfer** them using Git commands.
+  - Git keeps track of any changes you make in this directory before committing them to the project's history.
 
 ---
 
@@ -118,7 +120,7 @@
 
 - **Functionality:**
   - Instead of committing all changes at once, Git allows you to **group related changes** into a **changeset**.
-  - Changes staged in this area are not part of the project’s history until they are committed.
+  - Changes staged in this area are not part of the project's history until they are committed.
   - This gives you control over which changes to include in your commit.
 
 ---
@@ -149,95 +151,115 @@
     - **Quick fixes** (e.g., 5-minute patches).
   - Many developers prefer to work in **dedicated topic branches**, keeping the main history branch (e.g., `main` or `master`) clean and reserved for **public releases**.
 
+---
+
 # Getting Started
 
-## Step 1: Install Git and SSH
+## Install Git and SSH
 
-### 1. **Install Git**
+### Install Git
 ```bash
-sudo apt update
-sudo apt install git
+$ sudo apt update
+$ sudo apt install git
 ```
 
-### 2. **Install OpenSSH**
-- If OpenSSH is not already installed, use the following command:
+### Install OpenSSH
+If OpenSSH is not already installed, use the following command:
 ```bash
-sudo apt install openssh-client
+$ sudo apt update
+$ sudo apt install openssh-client
 ```
 
 ---
 
-## **Step 2: Set Up SSH for GitHub**
+## Set Up SSH for GitHub
 
-### 1. **Generate an SSH Key Pair**
-- Run the following command to create an SSH key:
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
-- The above step will ask for a *location* to store SSH and a *passphrase* for protection. You can leave the *location* as default by not providing one. 
-- This will generate a public and private SSH key in the `~/.ssh/` directory.
+### Generate an SSH Key Pair
+1. Run the command in your terminal.
+    ```bash
+    $ ssh-keygen -t ed25519 -C "your_email@example.com"
+    ```
+   - **`ssh-keygen`**: This is the command used to generate a new SSH key pair (a private and public key).
+   - **`-t ed25519`**: Specifies the type of the key to be generated. In this case, **ED25519** is used, which is a modern, secure, and fast elliptic-curve algorithm.
+   - **`-C "your_email@example.com"`**: This is a comment or label that will be associated with the key. It’s often an email address that helps identify the key, especially when managing multiple keys.
+2. It will prompt you to **enter a file in which to save the key**. If you just press **Enter**, it will save the key to the default location (`~/.ssh/id_ed25519`).
+3. You will be asked to **enter a passphrase** for added security (optional). If you don’t want a passphrase, just press **Enter**.
+4. After that, the key pair will be generated:
+   - The **private key** is stored in the file you specified (e.g., `~/.ssh/id_ed25519`).
+   - The **public key** is stored in a corresponding file (e.g., `~/.ssh/id_ed25519.pub`).
 
-### 2. **Add the SSH Key to the SSH Agent**
-- Start the SSH agent:
+### Add the SSH Key to the SSH Agent
+Start the SSH agent:
 ```bash
-eval "$(ssh-agent -s)"
-```
-- Add your SSH private key:
-```bash
-ssh-add ~/.ssh/id_ed25519
+sri@envy:~
+$ ssh-agent -s # Don't execute this command, it's just for reference. 
+SSH_AUTH_SOCK=/tmp/ssh-abc12345/agent.1234; export SSH_AUTH_SOCK;
+SSH_AGENT_PID=1234; export SSH_AGENT_PID;
+echo Agent pid 1234;
+sri@envy:~
+$ eval $(ssh-agent -s)
+Agent pid 1234
 ```
 
-### 3. **Add the SSH Key to GitHub**
-- Copy the public SSH key:
+Add your SSH **private key**:
 ```bash
-cat ~/.ssh/id_ed25519.pub
+sri@envy:~
+$ ssh-add ~/.ssh/id_ed25519
 ```
-- Log in to your GitHub account, navigate to **Settings > SSH and GPG Keys**, and add the copied key.
+
+### Add the SSH Key to GitHub
+Copy the **public SSH key**:
+```bash
+sri@envy:~
+$ cat ~/.ssh/id_ed25519.pub
+```
+Log in to your GitHub account, navigate to **Settings > SSH and GPG Keys**, and add the copied key.
 
 ---
 
-## **Step 3: Test Your SSH Connection**
-- Verify the SSH connection to GitHub:
+## Test Your SSH Connection
+Verify the SSH connection to GitHub:
 ```bash
-ssh -T git@github.com
+sri@envy:~
+$ ssh -T git@github.com
 ```
-- If successful, you should see:
+If successful, you should see:
 ```
 Hi <username>! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
 ---
 
-## **Step 4: Set SSH as Default for All Repositories**
-- To always use SSH when cloning or interacting with repositories:
+## Set SSH as Default for All Repositories
+To always use SSH when cloning or interacting with repositories:
 ```bash
 $ git config --global url."git@github.com:".insteadOf "https://github.com/"
 ```
-- This modifies the `~/.gitconifg` file: 
+This modifies the `~/.gitconifg` file, which will look like the follow: 
 ```
 [url "git@github.com:"]
           insteadOf = https://github.com/
 ```
 
-## **Step 5: Configure Git**
+## Configure Git
 
-### 1. **Set User Information**
-- Set your name and email, which will be recorded with your commits:
+### Set User Information
+Set your name and email, which will be recorded with your commits:
 ```bash
-$ git config --global user.name "John Smith"
-$ git config --global user.email "john@example.com"
+$ git config --global user.name "Naveen Srinivas"
+$ git config --global user.email "tonaveensrinivas@gmail.com"
 ```
-- Use the `--global` flag to apply these settings globally or omit it for repository-specific settings.
+Use the `--global` flag to apply these settings globally or omit it for repository-specific settings.
 
-### 2. **Set Your Preferred Editor**
-- Configure the default text editor for Git (e.g., VS Code):
+### Set Your Preferred Editor
+Configure the default text editor for Git (e.g., VS Code):
 ```bash
 $ git config --global core.editor "code --wait"
 ```
-- Replace `code --wait` with your preferred editor, like `nano` or `vim`. The `--wait` flag ensures Git waits for the editor to close before proceeding.
+Replace `code --wait` with your preferred editor, like `nano` or `vim`. The `--wait` flag ensures Git waits for the editor to close before proceeding.
 
-### 3. **Create Command Aliases**
-- Simplify commonly used Git commands with aliases:
+### Create Command Aliases
+Simplify commonly used Git commands with aliases:
 ```bash
 # Syntax:
 $ git config [--global] alias.<alias_name> "<command>"
@@ -246,12 +268,11 @@ $ git config [--global] alias.<alias_name> "<command>"
 $ git config --global alias.st status
 $ git config --global alias.pu "push -u origin main"
 ```
-- For instance, use `git st` instead of `git status`.
 - Here is how `~/.gitconfig` file would like after executing above commands:
 ```
 [user]
-	name = John Smith
-	email = john@example.com
+	name = Naveen Srinivas
+	email = tonaveensrinivas@gmail.com
 [core]
 	editor = code --wait
 [alias]
@@ -259,15 +280,15 @@ $ git config --global alias.pu "push -u origin main"
 	pu = push -u origin main
 ```
 
-### 4. **Explore More Options**
-- Run `git help config` in the terminal to see all available configuration options.
+### Explore More Options
+Run `git help config` in the terminal to see all available configuration options.
 
 
-# **Initializing Repositories**
+# Initializing Repositories
 
-## **Creating a New Repository:**
+## Creating a New Repository:
   
-- To initialize a repository, run the following:
+To initialize a repository, run the following:
 ```bash
 # Syntax
 $ git init <path>
@@ -276,11 +297,10 @@ $ git init <path>
 $ git init 
 $ git init ~/Documents/SampleProject
 ```
-- The `<path>` argument can be left blank to initialize the repository in the current directory.
- -  Git is minimally invasive; it only adds a `.git` directory in the root of your project folder.
+The `<path>` argument can be left blank to initialize the repository in the current directory. Git is **minimally invasive**; it only adds a `.git` directory in the root of your project folder.
 
-## **Cloning an Existing Repository:**
-- Instead of initializing a new repository, you can **clone** an existing Git repository:
+## Cloning an Existing Repository:
+Instead of initializing a new repository, you can **clone** an existing Git repository:
 ```bash
 # Syntax
 $ git clone ssh://<user>@<host>/path/to/repo[.git]
@@ -290,38 +310,39 @@ $ git clone https://github.com/user/repo[.git]
 $ git clone ssh://git@github.com/rnaveensrinivas/GitRepo
 $ git clone https://github.com/rnaveensrinivas/GitRepo
 ```
-- This command will create a full copy of the repository, including its history, working directory, staging area, and branch structure. Changes won’t be visible to others until you push them to a public repository.
+This command will create a full copy of the repository, including its history, working directory, staging area, and branch structure. Changes won't be visible to others until you push them to a public repository.
 
 ## Optional: Swtiching to use SSH Instead of HTTPS for Cloned Repositories
 
-### 1. **Check Your Current Remote URL**
-- You must in a repository that is associated with Github execute the following command. If you don't have one simply create a GitHub repository and clone it in local. 
+### Check Your Current Remote URL
+You must be in a repository that is associated with Github execute the following command. If you don't have one simply create a GitHub repository and clone it in local. 
 - Run the following command:
 ```bash
 $ git remote -v
 ```
-- If the URL starts with `https://`, you need to change it to SSH.
+If the URL starts with `https://`, you need to change it to SSH.
 
-### 2. **Update the Remote URL**
-- Replace `username/repository` with your GitHub username and repository name:
+### Update the Remote URL
+Replace `username/repository` with your GitHub username and repository name:
 ```bash
 $ git remote set-url origin git@github.com:username/repository.git
 ```
 
-### 3. **Verify the Change**
-- Check the updated remote URL:
+### Verify the Change
+Check the updated remote URL:
 ```bash
 $ git remote -v
 ```
-- The output should now display `git@github.com` instead of `https://`.
+The output should now display `git@github.com` instead of `https://`.
 
-### 4. **Push Changes Using SSH**
-- Push your changes without being prompted for a username and password:
+### Push Changes Using SSH
+Push your changes without being prompted for a username and password:
 ```bash
 $ git push
 ```
+**Note**: You may have to provide ssh passphrase. 
 
-### 5. **Optional: Set SSH as Default for All Repositories**
+### Optional: Set SSH as Default for All Repositories
 - To always use SSH when cloning or interacting with repositories:
 ```bash
 $ git config --global url."git@github.com:".insteadOf "https://github.com/"
@@ -344,24 +365,23 @@ $ git config --global url."git@github.com:".insteadOf "https://github.com/"
 
 # Recording Changes
 
-## **Git Snapshots vs. CVCS Diffs**
-### **Git’s Snapshot Model**:
-  - Git records **snapshots** of the entire project instead of just diffs between files (as in SVN or CVS).
-  - Each **commit** in Git represents a complete snapshot of all project files at a given point in time, making Git faster and more reliable.
-  - Unlike systems that record incremental changes, Git stores the full version of each file in a commit.
+## Git Snapshots vs. CVCS Diffs
+### Git's Snapshot Model:
+- Git records **snapshots** of the entire project instead of just diffs between files (as in SVN or CVS).
+- Each **commit** in Git represents a complete snapshot of all project files at a given point in time, making Git faster and more reliable.
+- Unlike systems that record incremental changes, Git stores the full version of each file in a commit.
   
-#### **Advantages:**
-  - Faster access to file versions.
-  - Avoids the need to regenerate file states when requested.
+#### Advantages:
+- Faster access to file versions.
+- Avoids the need to regenerate file states when requested.
 
-## **The Staging Area**
+## The Staging Area (Index)
 
-### **What is the Staging Area?**
+### What is the Staging Area?
 - The **staging area** (also known as the **index**) is an intermediary between the **working directory** and the **committed history**.
-- It allows you - The **staging area** (also known as the **index**) is an intermediary between the **working directory** and the **committed history**.
-- It allows you to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once.to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once.
+- It allows you to **stage** (select) changes for the next commit, ensuring you can commit only the desired changes and not the entire working directory at once. 
 
-### **Staging Changes:**
+### Staging Changes:
 - **Add stuff to the staging area** using:
 ```bash
 # Syntax
@@ -663,7 +683,7 @@ $ gitk
 ## **Tagging Commits**
 
 ### **What are Tags?**
-- Tags are **pointers** to specific commits, useful for marking important points in the project’s history, such as release versions.
+- Tags are **pointers** to specific commits, useful for marking important points in the project's history, such as release versions.
 
 
 ### **Creating a Tag**  
@@ -1179,7 +1199,7 @@ $ git reset --hard 8325a854   # Or git reset --hard v2.0
    - This can lead to issues in **collaborative projects**, especially if the commits have been shared with others.
 
 2. **Safe Use Cases**:
-   - It’s safe to reset **private commits** (commits only in your local repository).
+   - It's safe to reset **private commits** (commits only in your local repository).
    - Avoid resetting commits that others rely on to prevent conflicts.
 
 --- 
@@ -1495,7 +1515,7 @@ Switched to branch 'sample_branch'
 
 - **Why `git switch`?**
   - `git switch` was introduced to separate branch-related operations from file-related ones.
-  - Makes it clear that you’re working with branches and not modifying files in the working directory.
+  - Makes it clear that you're working with branches and not modifying files in the working directory.
 
 #### When to Use Which?
 
@@ -1508,17 +1528,17 @@ Switched to branch 'sample_branch'
 #### Key Notes:
 
 1. **Naming the branch:**
-   Ensure your branch name is descriptive and relevant to the work you’ll be doing on it, e.g., `bugfix/payment`, `feature/signup`, etc.
+   Ensure your branch name is descriptive and relevant to the work you'll be doing on it, e.g., `bugfix/payment`, `feature/signup`, etc.
 
 2. **Branch creation context:**
-   - The new branch is created from the **current branch’s HEAD**. If you want to create it from a different branch, you must first switch to that branch or use `git switch`/`checkout` with additional options.
+   - The new branch is created from the **current branch's HEAD**. If you want to create it from a different branch, you must first switch to that branch or use `git switch`/`checkout` with additional options.
 
 3. **Default branch movement:**
    By default, branches are based on the `HEAD` of your current branch unless you specify a different base.
 
 
 ### Detached HEADs
-A detached HEAD occurs when you check out a specific commit or tag rather than a branch. In this state, any new commits won’t belong to a branch and may be lost when switching branches. 
+A detached HEAD occurs when you check out a specific commit or tag rather than a branch. In this state, any new commits won't belong to a branch and may be lost when switching branches. 
 ```bash
 # Background
 $ git log
@@ -1656,7 +1676,7 @@ A 3-way merge is required when the two branches have diverged, meaning both bran
 
 ### How to Resolve Merge Conflicts
 
-If there are conflicting changes in the files between the two branches, Git will pause the merge and mark the conflicting files. You’ll need to manually resolve it by editing the file.
+If there are conflicting changes in the files between the two branches, Git will pause the merge and mark the conflicting files. You'll need to manually resolve it by editing the file.
 
 1. Identify conflicts:
    ```bash
@@ -1873,7 +1893,7 @@ After completing the rebase, the history looks cleaner:
 
 # Branching Workflows in Git
 
-Git’s lightweight and easy-to-merge branches make it a powerful tool for software development. 
+Git's lightweight and easy-to-merge branches make it a powerful tool for software development. 
 
 ## Key Commands for Branching Workflows
 - `git branch`: Create, list, or delete branches.
@@ -1981,8 +2001,8 @@ master ← hotfix/fix-critical-bug
 ## Branching Workflow Flexibility
 
 - Git treats all branches equally—the roles and purposes of branches are purely conventional.
-- Adapt these workflows to suit your project’s needs.
-- Understanding the mechanics of branches enables you to design custom workflows that align with your team’s requirements and preferences.
+- Adapt these workflows to suit your project's needs.
+- Understanding the mechanics of branches enables you to design custom workflows that align with your team's requirements and preferences.
 
 ## Summary of Key Points
 
@@ -2001,46 +2021,60 @@ master ← hotfix/fix-critical-bug
 
 ## What is a Remote Repository?
 
-- A **remote repository** is a version of your project hosted outside your local machine. It could be:
-  - On a **central server** like GitHub, GitLab, or Bitbucket.
-  - On another developer’s personal computer.
-  - Located elsewhere on your network or file system.
+A **remote repository** is a version of your project hosted outside your local machine. It could be:
+- On a **central server** like GitHub, GitLab, or Bitbucket.
+- On another developer's personal computer.
+- Located elsewhere on your network or file system.
 
-- **Purpose of Remote Repositories:**
-  - Enable collaboration among developers by sharing code and changes.
-  - Allow distributed development workflows.
+**Purpose of Remote Repositories:**
+- Enable collaboration among developers by sharing code and changes.
+- Allow distributed development workflows.
 
-- **Best Practices for Branches and Repositories:**
-  - Assign **entire repositories** to developers for their work.
-  - Use **branches** for feature development within a repository (not to manage individual developer workflows).
+**Best Practices for Branches and Repositories:**
+- Assign **entire repositories** to developers for their work.
+- Use **branches** for feature development within a repository.
 
 ## Manipulating Remote Repositories
 
 The `git remote` command is used to manage connections to remote repositories.
 
 ### Listing Remotes
-- To list all configured remotes:
+To list all configured remotes:
 ```bash
-git remote
-origin
-```
-- This example shows a single remote named `origin`, which is automatically added when cloning a repository.
+# Syntax
+$ git remote
 
-- To view remote URLs:
+# Example
+sri@envy:~/Documents/Git
+$ git remote
+origin
+sri@envy:~/Documents/Git
+$
+```
+The above example shows a single remote named `origin`, which is automatically added when cloning a repository.
+
+To view **remote URLs**:
 ```bash
-git remote -v
-origin  https://github.com/user/repo.git (fetch)
-origin  https://github.com/user/repo.git (push)
+# Syntax
+$ git remote -v 
+
+# Example
+sri@envy:~/Documents/Git
+$ git remote -v
+origin	git@github.com:rnaveensrinivas/Git (fetch)
+origin	git@github.com:rnaveensrinivas/Git (push)
+sri@envy:~/Documents/Git
+$ 
 ```
 ---
 
 ### Creating a Remote
-- To add a remote:
+To add a remote:
 ```bash
-git remote add <name> <url>
-```
-- Example:
-```bash
+# Syntax
+$ git remote add <name> <url>
+
+# Example
 git remote add origin https://github.com/user/repo.git
 ```
 - `origin`: A common name for the primary remote repository.
@@ -2242,11 +2276,11 @@ Using `git push -u origin main` is a common practice when you push a branch to a
 ---
 
 ### Push to Colleague
-- Pushing to a colleague’s repository:
+- Pushing to a colleague's repository:
 ```bash
 git push mary my-feature
 ```
-- Sends your `my-feature` branch to Mary’s remote repository.
+- Sends your `my-feature` branch to Mary's remote repository.
 
 ### Caution with Pushing
 - Avoid creating unnecessary branches on the remote repository:
@@ -2361,5 +2395,5 @@ git push mary my-feature
   - Contributors push to their own repositories, and integrators review and merge changes into the central repository.
 
 ### Conclusion
-- Git’s distributed nature makes the **integrator workflow** highly scalable, making it ideal for large open-source projects.
+- Git's distributed nature makes the **integrator workflow** highly scalable, making it ideal for large open-source projects.
 - The **centralized workflow** is easier for small teams but can run into issues when multiple developers try to update the central repository simultaneously.
