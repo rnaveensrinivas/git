@@ -2063,6 +2063,8 @@ After completing the rebase, the branch history now looks like this:
 | `git checkout other_branch_name`| Switches to the `other_branch_name` branch.                                              |
 | `git rebase -i branch_you_want_other_branch_to_rebase_into`| Opens an interactive rebase session for `other_branch_name` on top of `branch_you_want_other_branch_to_rebase_into`.         |
 
+---
+
 # Branching Workflows
 
 Git's lightweight and easy-to-merge branches make it a powerful tool for software development. 
@@ -2071,15 +2073,21 @@ Git's lightweight and easy-to-merge branches make it a powerful tool for softwar
 - `git branch`: Create, list, or delete branches.
 - `git checkout`: Switch to another branch or restore files.
 - `git merge`: Merge changes from one branch into another.
+- `git rebase`: Reapply commits from one branch onto another to create a linear history.
 
 ---
 
 ## Types of Branches
 
 Branches can be categorized into two main types:
+1. **Permanent Branches**
+2. **Topic Branches**
+  
+---
 
-### 1. Permanent Branches
-- **Purpose**: These branches contain the main history of a project and serve as integration points for stable, finalized changes.
+
+### Permanent Branches
+- **Purpose**: These branches contain the main history of a project and serve as **integration points** for stable, finalized changes.
 - **Characteristics**:
   - Typically long-lived and persist throughout the project lifecycle.
   - Often include branches like `master` (or `main`) and `develop`.
@@ -2098,11 +2106,11 @@ Branches can be categorized into two main types:
 ```plaintext
 master ← develop ← [feature-1, feature-2, ...]
 ```
-### 2. Topic Branches
+### Topic Branches
 
 Topic branches are temporary and created for specific tasks or changes. They help keep the project organized and protect permanent branches from untested code.
 
-#### **Feature Branches**
+#### Feature Branches
 - **Purpose**: Encapsulate a new feature or refactor.
 - **Characteristics**:
   - Typically stem from `develop` or another integration branch.
@@ -2132,7 +2140,7 @@ master ← develop ← feature/new-feature
    git branch -d feature/new-feature
    ```
 
-#### **Hotfix Branches**
+#### Hotfix Branches
 - **Purpose**: Quickly patch bugs or issues in the production code.
 - **Characteristics**:
   - Stem directly from `master` (or the public release branch).
@@ -2170,9 +2178,56 @@ master ← hotfix/fix-critical-bug
    ```bash
    git branch -d hotfix/fix-critical-bug
    ```
+
+## Sample Workflow
+```
+            hotfix/fix-critical-bug             hotfix/fix-critical-bug
+          --*--                               --*--
+v0.3     /   /      v0.4            v1.0     /   /
+*---*---*---*---*---*---*---*---*---*---*---*---*---*---*  main
+         \                     /
+          *---*---*---*---*---*---*---*  develop
+               \         /         \
+                *---*---*           *---*---*---*---* feature/big-feature
+                        feature/new-feature  \
+                                              *---*---* UserStory
+```
+
+**Legend**:
+- **`main`**: The stable, production-ready branch.
+- **`develop`**: The integration branch where features are merged before being released.
+- **`feature/*`**: Temporary branches for developing new features.
+- **`hotfix/*`**: Urgent branches for fixing critical bugs directly on `main`.
+- **`*`**: Commit points on the branches.
+- **`v0.3`, `v0.4`, `v1.0`**: Version tags marking stable releases in the `main` branch.
+
+### Branch Structure and Workflow
+
+1. **Main Branch (`main`)**:
+   - Holds stable, production-ready code.
+   - Releases such as **v0.3**, **v0.4**, and **v1.0** are tagged from this branch.
+
+2. **Develop Branch (`develop`)**:
+   - Integrates feature developments.
+   - Changes are merged here before going to `main`.
+
+3. **Hotfix Branch (`hotfix/fix-critical-bug`)**:
+   - Created from `main` for urgent bug fixes.
+   - Once fixed, it's merged into both `main` and `develop` to ensure consistency.
+
+4. **Feature Branches**:
+   - **`feature/new-feature`** and **`feature/big-feature`** are created from `develop` to work on new functionality.
+   - These are merged back into `develop` once the feature is ready.
+
+### Branch Flow
+
+- **Hotfixes** fix urgent issues in `main` and are merged back into `develop`.
+- **Feature branches** are created from `develop`, worked on, and then merged back into `develop`.
+- Once all features are integrated and tested, `develop` is merged into `main` for the next release.
+
 ## Branching Workflow Flexibility
 
-- Git treats all branches equally—the roles and purposes of branches are purely conventional.
+- Git treats all branches equally — the roles and purposes of branches are purely **conventional**.
 - Adapt these workflows to suit your project's needs.
 - Understanding the mechanics of branches enables you to design custom workflows that align with your team's requirements and preferences.
 
@@ -2188,6 +2243,8 @@ master ← hotfix/fix-critical-bug
   - Always branch off from the appropriate branch (`develop` for features, `master` for hotfixes).
   - Test and review changes before merging.
   - Delete topic branches after merging to keep the repository clean.
+
+---
 
 # Remote Repositories
 
