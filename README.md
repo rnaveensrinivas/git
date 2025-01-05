@@ -1,3 +1,62 @@
+# Table of contents
+
+* [Introduction](#Introduction)
+  * [What is Git?](#what-is-git)
+  * [Introduction to Version Control](#introduction-to-version-control)
+  * [Centralized vs. Distributed Version Control](#centralized-vs-distributed-version-control)
+  * [Design Philosophy of Git](#design-philosophy-of-git)
+* [Git Components](#git-components)
+* [Getting Started](#getting-started)
+  * [install Git](#install-git)
+  * [Set Up SSH for GitHub](#set-up-ssh-for-github)
+  * [Test Your SSH Connection](#test-your-ssh-connection)
+  * [Set SSH as Default for All Repositories](#set-ssh-as-default-for-all-repositories)
+  * [Configure Git](#configure-git)
+  * [**Summary**](#summary-of-git-configuration-commands)
+* [initializing Repositories](#initializing-repositories)
+  * [Cloning an Existing Repository](#cloning-an-existing-repository)
+  * [Optional: Swithcing to use SSH Instead of HTTPS](#optional-swtiching-to-use-ssh-instead-of-https-for-cloned-repositories)
+  * [**Summary**](#summary-of-git-initialization-commands)
+* [Recording Changes](#recording-changes)
+  * [Git Snapshots](#git-snapshots)
+  * [Staging Area](#the-staging-area-also-called-index)
+  * [Commits](#commits)
+  * [Tagging Commits](#tagging-commits)
+  * [**Summary**](#summary-of-recording-changes-commands)
+* [Undoing Changes](#undoing-changes)
+  * [Undoing Changes in Working Directory](#undoing-changes-in-the-working-directory)
+  * [Undoing changes in Staging Area](#undoing-in-the-staging-area)
+  * [Undoing Commits](#undoing-commits)
+  * [Amending Commits](#amending-commits)
+  * [**Summary**](#summary-of-undoing-changes)
+* [Branches](#branches)
+  * [Manipulating Branches](#manipulating-branches)
+  * [Merging Branches](#merging-branches)
+  * [Rebasing](#rebasing)
+  * [**Summary**](#summary-of-branches)
+* [Branching Workflows](#branching-workflows)
+  * [Types of Branches](#types-of-branches)
+    * [Permanent Branches](#permanent-branches)
+    * [Topic Branches](#topic-branches)
+  * [Sample Workflow](#sample-workflow)
+  * [Branching Workflow Flexibility](#branching-workflow-flexibility)
+  * [**Summary**](#summary-of-key-points) 
+* [Remote Repositories](#remote-repositories)
+  * [What is a Remote Repository?](#what-is-a-remote-repository)
+  * [Managing Remote Repository](#managing-remote-repositories)
+  * [Working with Remote Branches](#working-with-remote-branches)
+  * [Integrating changes from Remote Repositories](#integrating-changes-from-remote-branches)
+  * [Pushing Changes to Remote Repositories](#pushing-changes-to-remote-repositories)
+  * [**Summary**](#summary-of-remote-repositories)
+* [Remote Workflows](#remote-workflows)
+  * [Public (Bare) Repositories](#public-bare-repositories)
+  * [The Centralized Workflows](#the-centralized-workflow)
+  * [The Integrator Workflow](#the-integrator-workflow)
+* [**Cheat Sheet**](#cheat-sheet)
+
+
+---
+
 # Introduction
 ## What is Git?
 - Git is an **open-source version control system** known for its:
@@ -282,6 +341,15 @@ Run `git help config` in the terminal to see all available configuration options
 
 ---
 
+## Summary of Git Configuration Commands
+| Command  | Description |
+|----------|-------------|
+| `git config --global user.name "name"`| Sets the global Git username for all repositories.|
+| `git config --global user.email "email"`| Sets the global Git email for all repositories.|
+| `git config --global core.editor "editor --wait"`| Sets the default text editor for Git commands requiring user input, like commit messages.|
+| `git config --global alias.alias_name "command"`| Creates a shortcut (alias) for a Git command.|
+| `git help config`| Displays help information about Git configuration options.|
+
 # Initializing Repositories
 
 ## Creating a New Repository:
@@ -346,14 +414,9 @@ $ git push
 $ git config --global url."git@github.com:".insteadOf "https://github.com/"
 ```
 
-## Summary of Git Configuration and Setup Commands
+## Summary of Git Initialization Commands
 | Command  | Description |
 |----------|-------------|
-| `git config --global user.name "name"`| Sets the global Git username for all repositories.|
-| `git config --global user.email "email"`| Sets the global Git email for all repositories.|
-| `git config --global core.editor "editor --wait"`| Sets the default text editor for Git commands requiring user input, like commit messages.|
-| `git config --global alias.alias_name "command"`| Creates a shortcut (alias) for a Git command.|
-| `git help config`| Displays help information about Git configuration options.|
 | `git init`| Initializes a new Git repository in the current directory.|
 | `git init path`| Initializes a new Git repository at the specified path.|
 | `git clone ssh://<user>@<host>/path/to/repo[.git]`| Clones a repository from a remote server using an SSH URL with user and host details.|
@@ -1509,8 +1572,7 @@ Date:   Sun Dec 29 05:58:47 2024 +0530
 - **Purpose**: Replaces the previous commit with a new one, incorporating changes to the message or content without creating a new commit.
 - **Rewriting History**: Amending a commit changes its hash. **Avoid amending commits that have already been pushed or shared**, as this can cause issues for collaborators.
 
-
-## Summary of commands
+## Summary of Undoing Changes
 
 | **Command**| **Description**|
 |------------|----------------|
@@ -2431,7 +2493,7 @@ Let's consider an ASCII art expalanation:
                master      origin/master
 --- ---*---*---*---*---*---*
                 \
-                 *---*---* some-feature
+                 *---*---* some-feature**Summary**
 ```
 
 1. **Branches**:
@@ -2653,8 +2715,6 @@ git push mary my-feature
 
 ## Summary of Remote Repositories
 
-# Git Remote Commands Overview
-
 | **Command**| **Description**|
 |------------|----------------|
 | `git remote`| Lists all remote repositories configured in the local repository.|
@@ -2797,3 +2857,106 @@ The **integrator workflow** addresses **scalability and security concerns** that
 ### Conclusion
 - Git's distributed nature makes the **integrator workflow** perfect for large-scale open-source projects.
 - The **centralized workflow** is better for small teams but can face issues when multiple developers try to update the central repository at once.'
+
+# Cheat Sheet
+
+| Command  | Description |
+|----------|-------------|
+| **Basic Commands**    |
+| `git config --global user.name "name"`| Sets the global Git username for all repositories.|
+| `git config --global user.email "email"`| Sets the global Git email for all repositories.|
+| `git config --global core.editor "editor --wait"`| Sets the default text editor for Git commands requiring user input, like commit messages.|
+| `git config --global alias.alias_name "command"`| Creates a shortcut (alias) for a Git command.|
+| `git help config`| Displays help information about Git configuration options.|
+| _______________________________ |
+| **Git Initialization Commands** | 
+| `git init`| Initializes a new Git repository in the current directory.|
+| `git init path`| Initializes a new Git repository at the specified path.|
+| `git clone ssh://<user>@<host>/path/to/repo[.git]`| Clones a repository from a remote server using an SSH URL with user and host details.|
+| `git clone https://github.com/user/repo[.git]`| Clones a repository from GitHub or another remote server using an HTTPS URL.|
+| `git remote -v`| Displays the list of remote repositories and their URLs.|
+| `git remote url remote_name new_url`| Updates the URL for a specified remote repository.|
+| ______________________________ |
+| **Recording Changes Commands** | 
+| `git add`                             | Stages all changes in the working directory for the next commit.                                  |
+| `git add file/folder`                 | Stages specific files or folders for the next commit.                                             |
+| `git rm`                              | Removes files from the working directory and stages the deletion for the next commit.             |
+| `git rm --cached file`                | Removes a file from the staging area without deleting it from the working directory.              |
+| `git rm -r --cached folder`           | Removes a folder from the staging area without deleting it from the working directory.            |
+| `git status`                          | Shows the status of the working directory and staging area, listing changes to be committed.      |
+| `git diff`                            | Displays unstaged changes in the working directory.                                               |
+| `git diff --cached`                   | Displays changes staged for the next commit.                                                      |
+| `git commit`                          | Commits staged changes to the repository.                                                         |
+| `git commit -m "commit message"`      | Commits staged changes with a descriptive message in a single step.                               |
+| `git log branch_name`                 | Displays the commit history of the repository for the specified branch.                           |
+| `git log`                             | Displays the commit history of the repository.                                                    |
+| `git log --oneline`                   | Shows a concise commit history with one commit per line.                                          |
+| `git log --oneline file/folder`       | Shows a concise commit history for a specific file or folder.                                     |
+| `git log <since>..<until>`            | Displays commits between two references (e.g., tags, branches), with `<since>` being exclusive.   |
+| `git log --stat`                      | Shows commit history along with a summary of changes made in each commit.                         |
+| `git tag tag_name`                    | Creates a lightweight tag for the current commit.                                                 |
+| `git tag -a tag_name -m "tag message"`| Creates an annotated tag with a message for the current commit.                                   |
+| `git tag`                             | Lists all tags in the repository.                                                                 |
+| `git push origin tag_name`            | Pushes a specific tag to the remote repository.                                                   |
+| `git push --tags`                     | Pushes all tags to the remote repository.                                                         |
+| `git show tag_name`                   | Displays details of a specific tag, including the commit it references.                           |
+| `git checkout tag_name`               | Checks out a specific tag, detaching the HEAD to a read-only state.                               |
+| `gitk`                                | Opens a graphical tool to visualize the commit history.                                           |
+| ____________________ |
+| **Undoing Commands** | 
+| `git reset --hard HEAD`| Resets the working directory to the state of the last commit.|
+| `git clean -f`| **Deletes untracked files** from the working directory.|
+| `git checkout HEAD <file>`| Reverts a specific file to its state in the last commit.|
+| `git reset HEAD <file>`| Removes a file from the staging area, **leaving its changes in the working directory**. |
+| `git rm --cached <file>`| Removes a file from the staging area, removing it from the repository and make it **untracked**. |
+| `git reset HEAD~<number>`| Removes commits until the number from history and keeps its changes in the working directory. |
+| `git reset HEAD~1`| Removes the last commit from history and keeps its changes in the working directory. |
+| `git reset --hard <commit-id>`| Resets to a specific commit, **discarding all changes** after it.|
+| `git reset --soft <commit-id>`| Resets to a specific commit, **keeping changes staged** but removing subsequent commits. |
+| `git revert <commit-id>`| Creates a new commit that reverses the changes made by a specific commit.|
+| `git revert HEAD`| Creates a new commit that reverses the changes made by a most recent commit.|
+| `git commit --amend`| Edits the most recent commit message or adds changes to it.|
+| ______________________ |
+| **Branching Commands** | 
+| `git branch`                           | Lists all local branches in the repository.                                    |
+| `git branch branch_name [base_branch_name]`| Creates a new branch with the specified name, based out of base branch     |
+| `git branch -d branch_name`            | Deletes the specified branch (only if it has been fully merged).               |
+| `git branch -D branch_name`            | Force deletes the specified branch, even if it has not been merged.            |
+| `git checkout branch_name`             | Switches to the specified branch.                                              |
+| `git switch branch_name`               | Another command to switch to the specified branch (preferred over `checkout`). |
+| `git checkout -b branch_name`          | Creates a new branch and switches to it.                                       |
+| `git switch -c branch_name`            | Creates a new branch and switches to it (preferred over `checkout`).           |
+| `git checkout <commit-id>/<tags>`      | Checks out a specific commit or tag in a detached HEAD state.                  |
+| **Merging**                            |                                                                                 |
+| `git checkout branch_you_want_other_branch_to_merge_into`| Switches to the `branch_you_want_other_branch_to_merge_into` branch.|
+| `git merge other_branch_name`| Merges the `other_branch_name` branch into the current branch (`branch_you_want_other_branch_to_merge_into`).               |
+| **Rebasing (Opposite of Merging)**     |                                                                                 |
+| `git checkout other_branch_name`| Switches to the `other_branch_name` branch.                                              |
+| `git rebase branch_you_want_other_branch_to_rebase_into`| Reapplies the commits from `other_branch_name` onto `branch_you_want_other_branch_to_rebase_into` for a linear history.      |
+| **Interactive Rebasing**               |                                                                                 |
+| `git checkout other_branch_name`| Switches to the `other_branch_name` branch.                                              |
+| `git rebase -i branch_you_want_other_branch_to_rebase_into`| Opens an interactive rebase session for `other_branch_name` on top of `branch_you_want_other_branch_to_rebase_into`.         |
+| ______________________________ |
+| **Remote Repository Commands** | 
+| `git remote`| Lists all remote repositories configured in the local repository.|
+| `git remote -v`| Displays the full URLs of the configured remote repositories.|
+| `git remote add remote_name url`| Adds a new remote repository with a friendly name (`remote_name`) and its URL. |
+| `git remote rm remote_name`| Removes the specified remote repository connection.|
+| `git fetch remote_name branch_name`| Fetches updates from the specified branch of the remote repository.|
+| `git fetch remote_name`| Fetches updates from all branches of the specified remote repository.|
+| `git branch -r`| Lists all remote branches available.|
+| **Fetching and Merging**||
+| `git fetch remote_name`| Fetches changes from the remote repository without merging them.|
+| `git merge remote_name/master`| Merges changes from the remote `master` branch into the current branch.|
+| **Shortcut for Fetch + Merge**||
+| `git pull remote_name master`| Fetches and merges changes from the remote `master` branch into the current branch. |
+| **Fetching and Rebasing**||
+| `git fetch remote_name`| Fetches changes from the remote repository without merging them.|
+| `git rebase remote_name/master`| Rebases the current branch on top of the remote `master` branch.|
+| **Shortcut for Fetch + Rebase**||
+| `git pull --rebase remote_name master`| Fetches and rebases changes from the remote `master` branch into the current branch. |
+| **Pushing Changes**||
+| `git push remote_name branch_name`| Pushes the specified local branch to the remote repository.|
+| `git push -u remote_name branch_name` | Pushes the branch and sets the upstream branch for future pushes/pulls.|
+
+---
