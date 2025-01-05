@@ -1537,7 +1537,9 @@ Date:   Sun Dec 29 05:58:47 2024 +0530
 
 # Branches
 
-Branches in Git allow you to create multiple development paths, enabling parallel work on different versions of a project. When you create a new branch, you essentially get a new environment for working, including an isolated working directory, staging area, and project history.
+Branches in Git allow you to create multiple development paths, enabling parallel work on different versions of a project. **When you create a new branch, you essentially get a new environment for working**, including an isolated working directory, staging area, and project history. 
+
+Branches are **nothing but a pointer** to a commit. The default branch in any Git repo is **master**, which is created with first commit. Branches are nothing but files containing commit hash, you can view these files in `.git/refs/heads/branch_name`.
 
 ## Manipulating Branches
 
@@ -1549,20 +1551,22 @@ $ git branch
 
 # Example
 $ git branch
-* master
+* main
 ```
 
 ### Creating Branches
 Create a new branch using the command:
 ```bash
 # Syntax
-$ git branch <name>
+$ git branch <name> [<base_branch>]
 
 # Example
-$ git branch sample_branch
+$ git branch sample_branch main
 $ git branch
-* master
+* main
   sample_branch
+  develop
+$ git branch feature/BBMC-5555 develop
 ```
 This creates a new branch that points to the current commit, but it **does not automatically switch to it**.
 
@@ -1578,6 +1582,7 @@ Deleted branch sample_branch (was 8325a85).
 ```
 
 If the branch has unmerged commits, Git will prevent the deletion to avoid data loss. You can force deletion with:
+
 ```bash
 $ git branch -D <name>
 ```
@@ -1596,6 +1601,7 @@ Switched to branch 'sample_branch'
 $ git switch sample_branch 
 Switched to branch 'sample_branch'
 ```
+**Note**: Before checking out, ensure that working directory is clean. Logically this makes sense, when you checkout, the **entire working directory is reconstructed from the .git repository**, if you leave something uncommited then those tracked files will be overriden or cleaned. 
 
 ### Creating and Checking out Simulataneously
 
@@ -1658,7 +1664,7 @@ Switched to branch 'sample_branch'
 
 
 ### Detached HEADs
-A detached HEAD occurs when you check out a specific commit or tag rather than a branch. In this state, any new commits won't belong to a branch and may be lost when switching branches. 
+A detached HEAD occurs when you **checkout to a specific commit or tag** rather than a branch. In this state, any new commits won't belong to a branch and may be lost when switching branches. 
 ```bash
 # Background
 $ git log
@@ -1704,7 +1710,6 @@ $ git checkout -b <new-branch-name>
 # or
 $ git switch -c <new-branch-name>
 ```
-
 ---
 
 ## Merging Branches
@@ -1725,7 +1730,7 @@ Internally git manages merging in two ways:
 
 ### 1. Fast-forward Merge
 
-A fast-forward merge happens when there have been no new commits on the target branch since the branch was created. Git simply moves the branch pointer forward to include the commits from the other branch.
+A fast-forward merge happens when there have been no new commits on the target branch since the branch was created. Git **simply moves the branch pointer forward** to include the commits from the other branch. **No new commits are created for merges.**
 
 #### Example:
 
@@ -1760,7 +1765,7 @@ A fast-forward merge happens when there have been no new commits on the target b
 
 ### 2. Three-way Merge
 
-A 3-way merge is required when the two branches have diverged, meaning both branches have new commits. Git uses the **common ancestor** of both branches and the changes on each branch to create a new **merge commit**.
+A 3-way merge is required when the **two branches have diverged**, meaning both branches have new commits. Git uses the **common ancestor** of both branches and the changes on each branch to create a new **merge commit**. Two branch commits, and one common ancestor make up three commits, hence called three-way merge. 
 
 #### Example:
 
@@ -1794,7 +1799,7 @@ A 3-way merge is required when the two branches have diverged, meaning both bran
 
 ---
 
-### How to Resolve Merge Conflicts
+### Merge Conflicts
 
 If there are conflicting changes in the files between the two branches, Git will pause the merge and mark the conflicting files. You'll need to manually resolve it by editing the file.
 
@@ -1824,7 +1829,6 @@ If there are conflicting changes in the files between the two branches, Git will
    ```bash
    $ git commit
    ```
-
 ---
 
 ### Summary of Merge Strategies
@@ -1836,12 +1840,10 @@ If there are conflicting changes in the files between the two branches, Git will
 | **Merge Conflicts**| When changes in the branches conflict and cannot be automatically merged. | Requires manual resolution before completing the merge.|
 
 ## Rebasing
+Rebasing is the process of moving a branch to a new base. Rebasing is better than merging when you want a **clean, linear commit history**. It eliminates unnecessary merge commits, making the project history easier to read and navigate. Merge Commit hold no significance apart from merging, hence having lot of merges may clutter the tree. Rebasing is particularly useful for feature branches being integrated into main branches, as it simplifies tracking changes and avoids the clutter of multiple merge points. However, it should be used cautiously in collaborative workflows to avoid issues from rewritten history.
 
-### What is Rebasing?
-- Rebasing is the process of moving a branch to a new base.
-- It helps in manually organizing branches, creating a cleaner and more linear history.
 
-### Basic Rebasing Workflow
+### Basic Rebasing Workflow Syntax
 1. Check out the branch you want to rebase:
 ```bash
 $ git checkout some-feature
@@ -1854,13 +1856,27 @@ $ git rebase master
 
 ### Comparison: Rebase vs. Merge
 #### Rebase
-- Creates a linear history by moving the branch onto the new base.
-- No additional merge commits are created.
-- Example:
+Creates a linear history by moving the branch onto the new base. No additional merge commits are created. Consider the following example: 
 ```
-* Commit D (some-feature)
-* Commit C (master)
+* Commit C (main)
+|
+|  * Commit D (some-feature)
+|/
 * Commit B
+|
+* Commit A
+```
+
+After rebasing, 
+```
+   * Commit D (some-feature)
+ / 
+* Commit C (main)
+|
+|  
+|
+* Commit B
+|
 * Commit A
 ```
 #### Merge
@@ -1868,13 +1884,16 @@ $ git rebase master
 - May result in a cluttered history if done repeatedly.
 - Example:
 ```
-  * Merge Commit
-  |\
-  | * Commit D (some-feature)
-  |/
-  * Commit C (master)
-  * Commit B
-  * Commit A
+                *   Merge Commit (main)
+                |\  
+                | * Commit D (some-feature)
+                | |  
+Commit C (main) * | 
+                |/  
+                * Commit B
+                |
+                * Commit A
+
 ```
 ### Advantages of Rebasing
 - Creates a clean and linear history.
@@ -1886,113 +1905,147 @@ $ git rebase master
   - Rebasing creates new commits with different IDs, effectively destroying the original commits.
   - This can lead to issues in collaborative workflows if others are working on the same branch.
 
-### Interactive Rebasing  
+---
 
-Imagine your Git repository has the following commit history:  
+### Interactive Rebasing
+
+#### Initial Commit History  
+Imagine you have the following Git history for a feature branch (`some-feature`):  
 
 ```
-* 6ac8a9f Second commit for a new feature
-* 58dec2a First commit for a new feature
+* 7d2e4c8 Fix typos in the feature implementation
+* 5b1a7c3 Add unit tests for the feature
+* 3f8c6b2 Implement the feature logic
+* e1f1d7a Initial commit for the feature
 * a1f76d0 Latest commit on master
 * b3c19e1 Older commit on master
 ```
 
-You want to **clean up your feature branch** so that the two commits are combined into one with a meaningful message.  
+The feature branch includes **four commits**:  
+1. `e1f1d7a`: Initial commit for the feature  
+2. `3f8c6b2`: Implement the feature logic  
+3. `5b1a7c3`: Add unit tests for the feature  
+4. `7d2e4c8`: Fix typos in the feature implementation  
+
+You want to clean up this history by:  
+- Combining the four feature branch commits into one.  
+- Writing a single, meaningful commit message summarizing the changes.  
 
 ---
 
-#### Step-by-Step Workflow  
+#### Step-by-Step Workflow
 
 ##### 1. Start Interactive Rebase
 Run the following command:  
 ```bash
+# Syntax
 $ git rebase -i master
 ```  
-This means:  
-- "Rebase my feature branch commits (`6ac8a9f` and `58dec2a`) onto the `master` branch (`a1f76d0`)."
+This tells Git:  
+- Rebase all commits in `some-feature` (`7d2e4c8`, `5b1a7c3`, `3f8c6b2`, `e1f1d7a`) onto `master` (`a1f76d0`).  
 
 ---
 
 ##### 2. Interactive Rebase Prompt
-Git opens an editor with the list of commits from the feature branch:  
+Git opens an editor showing the commits in the feature branch:  
+
 ```plaintext
-pick 58dec2a First commit for new feature
-pick 6ac8a9f Second commit for new feature
-```  
-Each line represents a commit and begins with a command (`pick` by default).  
+pick e1f1d7a Initial commit for the feature
+pick 3f8c6b2 Implement the feature logic
+pick 5b1a7c3 Add unit tests for the feature
+pick 7d2e4c8 Fix typos in the feature implementation
+```
+
+Each line represents a commit. The `pick` command means "keep this commit as is."  
 
 ---
 
 ##### 3. Modify the Rebase Instructions
-You decide to combine the two commits into one. Change the second `pick` to `squash`:  
+To combine all four commits into one, change `pick` to `squash` for the last three commits:  
+
 ```plaintext
-pick 58dec2a First commit for new feature
-squash 6ac8a9f Second commit for new feature
-```  
-Explanation:  
-- `pick`: Keep the first commit as is.  
-- `squash`: Combine the changes from the second commit into the first.  
+pick e1f1d7a Initial commit for the feature
+squash 3f8c6b2 Implement the feature logic
+squash 5b1a7c3 Add unit tests for the feature
+squash 7d2e4c8 Fix typos in the feature implementation
+```
+
+**Explanation**:  
+- The first commit (`pick e1f1d7a`) will remain as the base.  
+- The changes from the next three commits will be **combined (squashed)** into the first commit.  
 
 ---
 
 ##### 4. Edit the Commit Message
-Git will prompt you to write a new commit message for the combined commit. For example:  
+Git prompts you to write a new commit message summarizing the combined changes:  
+
 ```plaintext
-# This is a combination of 2 commits.
+# This is a combination of 4 commits.
 # The first commit's message is:
-First commit for new feature
+Initial commit for the feature
 
-# The following commit message will be discarded:
-Second commit for new feature
+# The following commit messages will be discarded:
+Implement the feature logic
+Add unit tests for the feature
+Fix typos in the feature implementation
 
-# Please write a new message for the commit:
-Added a new feature with necessary updates
-```  
+# Write a new commit message:
+Added a new feature with logic, tests, and typo fixes
+```
+
+**Tip**: Write a clear and descriptive message summarizing the changes.  
 
 ---
 
-##### 5. Resulting Commit History
-After completing the rebase, the history looks cleaner:  
-```plaintext
-* d9e72f3 Added a new feature with necessary updates
+##### 5. View the Cleaned-Up Commit History
+After completing the rebase, the branch history now looks like this:  
+
+```
+* 9d3f2a5 Added a new feature with logic, tests, and typo fixes
 * a1f76d0 Latest commit on master
 * b3c19e1 Older commit on master
-```  
-- The two commits are now a single commit with a meaningful message.  
+```
+
+**Key Changes**:  
+- The four commits in the feature branch are now combined into one (`9d3f2a5`).  
+- The history is clean, linear, and easier to understand.  
 
 ---
 
-#### Visualizing Common Commands  
+### Commands Used in Interactive Rebase
 
-| **Command** | **Effect**| **Example Use Case**|
-|-------------|-----------|---------------------|
-| **pick**    | Keep the commit as is.| Retain a commit without changes.|
-| **reword**  | Modify the commit message only.| Correct a typo or clarify the commit message.|
-| **edit**    | Pause the rebase to make changes to the commit (e.g., modify files or amend the commit).| Update code in an old commit.|
-| **squash**  | Combine the commit with the previous one and merge their messages.| Clean up commits to reduce clutter in the history.|
-| **fixup**   | Combine the commit with the previous one but discard its commit message.| Merge minor fixes (e.g., typo corrections) into a larger commit.|
-| **drop**    | Remove the commit entirely from history.| Delete commits that added experimental code that is no longer needed.|
+| **Command** | **Effect** | **Example Use Case** |
+|-------------|------------|----------------------|
+| **pick**    | Keep the commit as is. | Retain an important commit without changes. |
+| **squash**  | Combine the commit with the previous one and merge their messages. | Reduce multiple related commits into one. |
+| **fixup**   | Combine the commit with the previous one but discard its message. | Clean up small fixes without keeping commit messages. |
+| **reword**  | Keep the commit but edit its message. | Clarify an unclear commit message. |
+| **drop**    | Remove the commit from history. | Delete unnecessary or experimental commits. |
+| **edit**    | Pause the rebase to make changes to the commit or files. | Modify a specific commit in the middle of history. |
 
 ---
 
-#### Best Practices  
+### Best Practices for Interactive Rebase
+1. **Use for Local Cleanup**:  
+   - Squash commits and refine messages before sharing the branch with others.  
 
-1. **Use Interactive Rebase for Local Cleanup:**  
-   - Before sharing your branch, squash redundant commits and reword unclear messages to maintain a clean history.  
+2. **Avoid Rebasing Public Branches**:  
+   - Rewriting history on branches shared with others can cause conflicts.  
 
-2. **Avoid Rebasing Public Branches:**  
-   - Never rewrite history for branches others are working on to prevent conflicts.  
+3. **Combine Related Commits**:  
+   - Merge small, incremental commits into a single meaningful change.  
 
-3. **Rebase vs. Merge:**  
-   - Use rebase to clean up commits in private branches.  
-   - Use merge for public branches to preserve history and avoid disruption.  
+4. **Keep Commit Messages Clear**:  
+   - Write descriptive and concise commit messages for easier collaboration.  
+
+--- 
 
 ## Summary of Branches
 
 | **Command**                            | **Description**                                                                 |
 |----------------------------------------|---------------------------------------------------------------------------------|
 | `git branch`                           | Lists all local branches in the repository.                                    |
-| `git branch branch_name`               | Creates a new branch with the specified name.                                  |
+| `git branch branch_name [base_branch_name]`| Creates a new branch with the specified name, based out of base branch     |
 | `git branch -d branch_name`            | Deletes the specified branch (only if it has been fully merged).               |
 | `git branch -D branch_name`            | Force deletes the specified branch, even if it has not been merged.            |
 | `git checkout branch_name`             | Switches to the specified branch.                                              |
@@ -2001,17 +2054,16 @@ After completing the rebase, the history looks cleaner:
 | `git switch -c branch_name`            | Creates a new branch and switches to it (preferred over `checkout`).           |
 | `git checkout <commit-id>/<tags>`      | Checks out a specific commit or tag in a detached HEAD state.                  |
 | **Merging**                            |                                                                                 |
-| `git checkout develop`                 | Switches to the `develop` branch.                                              |
-| `git merge feature`                    | Merges the `feature` branch into the current branch (`develop`).               |
+| `git checkout branch_you_want_other_branch_to_merge_into`| Switches to the `branch_you_want_other_branch_to_merge_into` branch.|
+| `git merge other_branch_name`| Merges the `other_branch_name` branch into the current branch (`branch_you_want_other_branch_to_merge_into`).               |
 | **Rebasing (Opposite of Merging)**     |                                                                                 |
-| `git checkout feature`                 | Switches to the `feature` branch.                                              |
-| `git rebase develop`                   | Reapplies the commits from `feature` onto `develop` for a linear history.      |
+| `git checkout other_branch_name`| Switches to the `other_branch_name` branch.                                              |
+| `git rebase branch_you_want_other_branch_to_rebase_into`| Reapplies the commits from `other_branch_name` onto `branch_you_want_other_branch_to_rebase_into` for a linear history.      |
 | **Interactive Rebasing**               |                                                                                 |
-| `git checkout feature`                 | Switches to the `feature` branch.                                              |
-| `git rebase -i develop`                | Opens an interactive rebase session for `feature` on top of `develop`.         |
+| `git checkout other_branch_name`| Switches to the `other_branch_name` branch.                                              |
+| `git rebase -i branch_you_want_other_branch_to_rebase_into`| Opens an interactive rebase session for `other_branch_name` on top of `branch_you_want_other_branch_to_rebase_into`.         |
 
-
-# Branching Workflows in Git
+# Branching Workflows
 
 Git's lightweight and easy-to-merge branches make it a powerful tool for software development. 
 
