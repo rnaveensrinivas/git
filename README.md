@@ -462,7 +462,9 @@ $ git add f1          # Stages the "f1" file
 ```
 
 #### Stage File Deletion (Without Removing the File from the Working Directory)
-To stage the removal of a file or directory, but keep it in the working directory, use `git rm --cached`. This removes the file from the staging area but leaves it in your local file system.
+To stage the removal of a file or directory, but keep it in the working directory, use `git rm --cached`. This removes the file from the staging area but leaves it in your local file system. 
+
+**Note**: The file now becomes **untracked**. 
 
 ```bash
 # Syntax
@@ -2880,9 +2882,9 @@ The **integrator workflow** addresses **scalability and security concerns** that
 | **Recording Changes Commands** | 
 | `git add`                             | Stages all changes in the working directory for the next commit.                                  |
 | `git add file/folder`                 | Stages specific files or folders for the next commit.                                             |
-| `git rm`                              | Removes files from the working directory and stages the deletion for the next commit.             |
-| `git rm --cached file`                | Removes a file from the staging area without deleting it from the working directory.              |
-| `git rm -r --cached folder`           | Removes a folder from the staging area without deleting it from the working directory.            |
+| `git rm`                              | Removes files from the working directory and stages the deletion for the next commit.  Makes the file or folder untracked          |
+| `git rm --cached file`                | Removes a file from the staging area without deleting it from the working directory. Makes the file untracked.             |
+| `git rm -r --cached folder`           | Removes a folder from the staging area without deleting it from the working directory. Makes the folder untracked.           |
 | `git status`                          | Shows the status of the working directory and staging area, listing changes to be committed.      |
 | `git diff`                            | Displays unstaged changes in the working directory.                                               |
 | `git diff --cached`                   | Displays changes staged for the next commit.                                                      |
@@ -2907,12 +2909,13 @@ The **integrator workflow** addresses **scalability and security concerns** that
 | `git reset --hard HEAD`| Resets the working directory to the state of the last commit.|
 | `git clean -f`| **Deletes untracked files** from the working directory.|
 | `git checkout HEAD <file>`| Reverts a specific file to its state in the last commit.|
-| `git reset HEAD <file>`| Removes a file from the staging area, **leaving its changes in the working directory**. |
+| `git reset HEAD <file>`| Removes a file from the staging area, **leaving its changes in the working directory** and keeping it **tracked**. |
 | `git rm --cached <file>`| Removes a file from the staging area, removing it from the repository and make it **untracked**. |
 | `git reset HEAD~<number>`| Removes commits until the number from history and keeps its changes in the working directory. |
 | `git reset HEAD~1`| Removes the last commit from history and keeps its changes in the working directory. |
 | `git reset --hard <commit-id>`| Resets to a specific commit, **discarding all changes** after it.|
 | `git reset --soft <commit-id>`| Resets to a specific commit, **keeping changes staged** but removing subsequent commits. |
+| `git reset <commit-id>`| Resets to a specific commit, **keeping changes unstaged (in working directory)** but removing subsequent commits. |
 | `git revert <commit-id>`| Creates a new commit that reverses the changes made by a specific commit.|
 | `git revert HEAD`| Creates a new commit that reverses the changes made by a most recent commit.|
 | `git commit --amend`| Edits the most recent commit message or adds changes to it.|
@@ -2945,12 +2948,15 @@ The **integrator workflow** addresses **scalability and security concerns** that
 | `git fetch remote_name branch_name`| Fetches updates from the specified branch of the remote repository.|
 | `git fetch remote_name`| Fetches updates from all branches of the specified remote repository.|
 | `git branch -r`| Lists all remote branches available.|
+| `git branch -a`| Lists all branches (remote and local) available.|
 | **Fetching and Merging**||
+| `git checkout branch_you_want_remote_to_merge_into` | |
 | `git fetch remote_name`| Fetches changes from the remote repository without merging them.|
 | `git merge remote_name/master`| Merges changes from the remote `master` branch into the current branch.|
 | **Shortcut for Fetch + Merge**||
 | `git pull remote_name master`| Fetches and merges changes from the remote `master` branch into the current branch. |
 | **Fetching and Rebasing**||
+| `git checkout branch_you_want_remote_to_rebase_into` | |
 | `git fetch remote_name`| Fetches changes from the remote repository without merging them.|
 | `git rebase remote_name/master`| Rebases the current branch on top of the remote `master` branch.|
 | **Shortcut for Fetch + Rebase**||
