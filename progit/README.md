@@ -1,1 +1,0 @@
-Integrating ProGit into Git :)
