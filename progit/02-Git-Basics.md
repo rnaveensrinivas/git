@@ -29,6 +29,23 @@
   - [Undoing Things](#undoing-things)
     - [Undoing Commits](#undoing-commits)
     - [Undoing Staged Files](#undoing-staged-files)
+    - [Unmodifying a Modified File](#unmodifying-a-modified-file)
+    - [Undoing Things with `git restore`](#undoing-things-with-git-restore)
+  - [Working with Remote](#working-with-remote)
+    - [Showing Your Remotes](#showing-your-remotes)
+    - [Adding Remote Repositories](#adding-remote-repositories)
+    - [Fetching and Pulling from Your Remotes](#fetching-and-pulling-from-your-remotes)
+    - [Pushing to Your Remotes](#pushing-to-your-remotes)
+    - [Inspecting a Remote](#inspecting-a-remote)
+    - [Renaming and Removing Remotes](#renaming-and-removing-remotes)
+  - [Tagging](#tagging)
+    - [Annotated Tags](#annotated-tags)
+    - [Lightweight Tags](#lightweight-tags)
+    - [Tagging Later](#tagging-later)
+    - [Sharing Tags](#sharing-tags)
+    - [Deleting Tags](#deleting-tags)
+    - [Checking out Tags](#checking-out-tags)
+  - [Git Aliasing](#git-aliasing)
 
 ## Getting a Git Repository
 
@@ -912,3 +929,706 @@ Be cautious when undoing changes in Git as it can lead to data loss if done inco
 - **Important Notes**:
   - `git reset` can be a **dangerous command**, particularly with the `--hard` flag, but in this case, using `git reset HEAD` only **affects the staging area**, leaving the working directory untouched.
   - For now, focus on using `git reset HEAD <file>` for unstaging files, as this is a safe and useful practice.
+
+---
+
+### Unmodifying a Modified File  
+
+- **Reverting a modified file**  
+  - If you want to discard changes to a file, use:  
+    ```
+    git checkout -- <file>
+    ```  
+  - This restores the file to the last committed version.
+
+- **Git status provides guidance**  
+  - Running `git status` shows:  
+    ```
+    Changes not staged for commit:
+      (use "git add <file>..." to update what will be committed)
+      (use "git checkout -- <file>..." to discard changes in working directory)
+    ```
+
+- **Warning: This command is destructive**  
+  - `git checkout -- <file>` permanently removes local changes.  
+  - Only use it if you are sure you don’t need those modifications.  
+
+- **Alternative approaches**  
+  - If you want to keep changes but temporarily set them aside, consider:  
+    - **Stashing** (`git stash`)  
+    - **Branching** (creating a new branch for changes)
+
+- **Recovering lost commits**  
+  - Any committed changes in Git can typically be recovered.  
+  - Even deleted branches or amended commits can often be retrieved.  
+  - However, **uncommitted changes that are lost cannot be recovered**.
+
+---
+
+### Undoing Things with `git restore`  
+
+- **Introduction to `git restore`**  
+  - Introduced in Git **2.23.0** as an alternative to `git reset`.  
+  - Used for many undo operations instead of `git reset`.  
+
+- **Unstaging a Staged File**  
+  - If you accidentally stage a file, use:  
+    ```
+    git restore --staged <file>
+    ```  
+  - Example scenario:  
+    - You run `git add *` and stage all changes.  
+    - `git status` suggests:  
+      ```
+      (use "git restore --staged <file>..." to unstage)
+      ```  
+    - Running `git restore --staged CONTRIBUTING.md` unstages the file.
+
+- **Unmodifying a Modified File**  
+  - If you want to discard local changes, use:  
+    ```
+    git restore <file>
+    ```  
+  - `git status` will remind you with:  
+    ```
+    (use "git restore <file>..." to discard changes in working directory)
+    ```
+  - Example:  
+    - Running `git restore CONTRIBUTING.md` reverts it to the last committed state.
+
+- **Warning: `git restore` is destructive**  
+  - `git restore <file>` **permanently removes local changes**.  
+  - Use this command only if you are **sure** you don’t need those modifications.
+
+---
+
+## Working with Remote
+
+- **Definition of Remote Repositories**  
+  - Remote repositories are **versions of your project** hosted on the **Internet or a network**.  
+  - They allow **collaboration** by enabling **pushing and pulling of data**.  
+
+- **Managing Remote Repositories**  
+  - **Adding** new remotes.  
+  - **Removing** outdated or unused remotes.  
+  - Managing **remote branches**.  
+  - Setting up **tracking branches** for easier updates.  
+
+- **Operations with Remotes**  
+  - **Push** changes to share work.  
+  - **Pull** updates from others.  
+  - **Fetch** remote changes without merging them immediately.  
+
+- **Remote Repositories on the Same Machine**  
+  - A "remote" repository **does not have to be on a different machine**.  
+  - You can work with a remote repository **on the same host**, using standard Git commands like `push`, `pull`, and `fetch`.
+
+---
+
+### Showing Your Remotes  
+
+- **Checking Remote Repositories**  
+  - Use `git remote` to list remote repositories configured for your project.  
+  - If you cloned a repository, you will see at least one remote called **`origin`** (default name for the source repository).  
+
+  ```bash
+  $ git remote
+  origin
+  ```
+
+- **Displaying Remote URLs**  
+  - Use `git remote -v` to view the URLs associated with each remote.  
+  - This shows both **fetch** (read) and **push** (write) URLs.  
+
+  ```bash
+  $ git remote -v
+  origin  https://github.com/schacon/ticgit (fetch)
+  origin  https://github.com/schacon/ticgit (push)
+  ```
+
+- **Working with Multiple Remotes**  
+  - If collaborating with multiple people, you may have several remotes.  
+  - Example:  
+
+  ```bash
+  $ git remote -v
+  bakkdoor  https://github.com/bakkdoor/grit (fetch)
+  bakkdoor  https://github.com/bakkdoor/grit (push)
+  cho45     https://github.com/cho45/grit (fetch)
+  cho45     https://github.com/cho45/grit (push)
+  defunkt   https://github.com/defunkt/grit (fetch)
+  defunkt   https://github.com/defunkt/grit (push)
+  ```
+
+  - This setup allows pulling contributions from multiple sources.  
+  - Push access depends on permissions, which **isn’t shown** in this command output.  
+
+- **Different Remote Protocols**  
+  - Remotes can use different protocols, such as:  
+    - **HTTPS** (`https://github.com/user/repo.git`)  
+    - **SSH** (`git@github.com:user/repo.git`)  
+    - **Git protocol** (`git://github.com/user/repo.git`)  
+
+---
+
+### Adding Remote Repositories  
+
+- **Adding a New Remote**  
+  - Use `git remote add <shortname> <url>` to add a remote repository with a short alias.  
+  - Example:  
+
+    ```bash
+    $ git remote add pb https://github.com/paulboone/ticgit
+    ```
+
+- **Verifying Added Remotes**  
+  - Run `git remote -v` to list all remotes and their URLs.  
+  - Example output:  
+
+    ```bash
+    $ git remote -v
+    origin  https://github.com/schacon/ticgit (fetch)
+    origin  https://github.com/schacon/ticgit (push)
+    pb      https://github.com/paulboone/ticgit (fetch)
+    pb      https://github.com/paulboone/ticgit (push)
+    ```
+
+- **Fetching Data from a Remote**  
+  - Use `git fetch <shortname>` to retrieve new branches and updates from a remote repository.  
+  - Example:  
+
+    ```bash
+    $ git fetch pb
+    ```
+
+  - This fetches new branches and updates from `pb`.  
+
+- **Accessing the Fetched Branches**  
+  - After fetching, remote branches can be accessed locally, e.g., `pb/master`.  
+  - You can:  
+    - **Merge** it into your branch.  
+    - **Check it out** to inspect its contents.
+
+---
+
+### Fetching and Pulling from Your Remotes  
+
+- **Fetching Remote Data**  
+  - Use `git fetch <remote>` to download new data from the remote repository.  
+  - It **does not** merge changes into your working branch automatically.  
+  - Example:  
+
+    ```bash
+    $ git fetch origin
+    ```
+
+- **Fetching vs. Pulling**  
+  - `git fetch` → Downloads changes but **does not merge** them.  
+  - `git pull` → Fetches **and merges** the remote branch into the current branch.  
+  - Example of `git pull`:  
+
+    ```bash
+    $ git pull origin master
+    ```
+
+- **Tracking Remote Branches**  
+  - When you clone a repository, your local `master` branch is automatically set to track `origin/master`.  
+  - Running `git pull` fetches and merges updates from the tracked branch.  
+
+- **Handling Git Pull Warnings (Git 2.27+)**  
+  - Git warns if `pull.rebase` is not set. Options:  
+    - Default behavior (fast-forward if possible, else merge commit):  
+
+      ```bash
+      $ git config --global pull.rebase "false"
+      ```
+
+    - Always rebase when pulling:  
+
+      ```bash
+      $ git config --global pull.rebase "true"
+      ```
+---
+
+### Pushing to Your Remotes  
+
+- **Pushing Local Changes to a Remote Repository**  
+  - Use `git push <remote> <branch>` to push your commits to the remote repository.  
+  - Example:  
+
+    ```bash
+    $ git push origin master
+    ```
+
+- **Push Conditions**  
+  - You **must** have write access to the remote repository.  
+  - Your push will be **rejected** if someone else has pushed changes before you.  
+
+- **Handling Rejected Pushes**  
+  - First, fetch the latest changes:  
+
+    ```bash
+    $ git fetch origin
+    ```
+
+  - Merge the remote changes into your branch:  
+
+    ```bash
+    $ git merge origin/master
+    ```
+
+  - Push your changes after resolving conflicts (if any):  
+
+    ```bash
+    $ git push origin master
+    ```
+
+---
+
+### Inspecting a Remote
+
+To view detailed information about a remote repository, use:  
+
+```bash
+$ git remote show <remote>
+```
+
+For example, checking details of the `origin` remote:  
+
+```bash
+$ git remote show origin
+```
+
+**Example Output**  
+
+```bash
+$ git remote show origin
+* remote origin
+  Fetch URL: https://github.com/schacon/ticgit
+  Push  URL: https://github.com/schacon/ticgit
+  HEAD branch: master
+  Remote branches:
+    master                               tracked
+    dev-branch                           tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (up to date)
+```
+
+**Understanding the Output**  
+
+- **Fetch & Push URL**: The repository’s location for pulling and pushing updates.  
+- **HEAD branch**: The main branch the remote repository points to.  
+- **Remote branches**: Lists branches that exist on the remote.  
+- **Local branch configured for `git pull`**: Specifies which local branch will merge with its remote counterpart when pulling.  
+- **Local ref configured for `git push`**: Defines which branch gets updated when pushing.  
+
+---
+
+For more complex repositories, the output may include additional details:  
+
+```bash
+$ git remote show origin
+* remote origin
+  URL: https://github.com/my-org/complex-project
+  Fetch URL: https://github.com/my-org/complex-project
+  Push  URL: https://github.com/my-org/complex-project
+  HEAD branch: master
+  Remote branches:
+    master                           tracked
+    dev-branch                       tracked
+    markdown-strip                   tracked
+    issue-43                         new (next fetch will store in remotes/origin)
+    issue-45                         new (next fetch will store in remotes/origin)
+    refs/remotes/origin/issue-11     stale (use 'git remote prune' to remove)
+  Local branches configured for 'git pull':
+    dev-branch merges with remote dev-branch
+    master     merges with remote master
+  Local refs configured for 'git push':
+    dev-branch                     pushes to dev-branch                     (up to date)
+    markdown-strip                 pushes to markdown-strip                 (up to date)
+    master                         pushes to master                         (up to date)
+```
+
+**Additional Details in This Output**  
+
+- **New branches**:  
+  ```bash
+  issue-43                         new (next fetch will store in remotes/origin)
+  ```
+  These are branches that exist on the remote but are not yet fetched locally. Running `git fetch origin` will update your local copy.  
+
+- **Stale branches**:  
+  ```bash
+  refs/remotes/origin/issue-11     stale (use 'git remote prune' to remove)
+  ```
+  These branches no longer exist on the remote but still appear locally. Clean them up with:  
+
+  ```bash
+  $ git remote prune origin
+  ```
+
+This command removes outdated references, keeping your repository up to date.
+
+---
+
+### Renaming and Removing Remotes
+
+**Renaming a Remote**  
+To rename a remote repository, use:  
+
+```bash
+$ git remote rename <old-name> <new-name>
+```
+
+For example, renaming `pb` to `paul`:  
+
+```bash
+$ git remote rename pb paul
+$ git remote
+origin
+paul
+```
+**Note:** This also updates all remote-tracking branches, for e.g., `pb/master` → `paul/master`.
+
+
+**Removing a Remote**  
+If a remote is no longer needed, remove it using:  
+
+```bash
+$ git remote remove <remote-name>
+```
+or  
+```bash
+$ git remote rm <remote-name>
+```
+
+Example: Removing `paul`:  
+
+```bash
+$ git remote remove paul
+$ git remote
+origin
+```
+
+**Important:** Removing a remote deletes:  
+- **Remote-tracking branches** (e.g., `paul/master`)  
+- **Associated configurations**  
+
+---
+
+## Tagging
+
+Git has the ability to tag specific points in a repository’s history as being important. Typically, people use this functionality to mark release points (v1.0, v2.0 and so on).
+
+- **Listing existing tags**: Use the command `git tag` to list all tags in the repository.
+  - Example:  
+    ```
+    $ git tag  
+    v1.0  
+    v2.0  
+    ```
+
+- **Order of tags**: Tags are listed alphabetically by default; the order does not indicate their significance.
+
+- **Listing tags with a pattern**: You can list tags that match a specific pattern using `git tag -l <pattern>`.
+  - Example to search for version `1.8.5` tags:  
+    ```
+    $ git tag -l "v1.8.5*"  
+    v1.8.5  
+    v1.8.5-rc0  
+    v1.8.5-rc1  
+    v1.8.5-rc2  
+    v1.8.5-rc3  
+    v1.8.5.1  
+    v1.8.5.2  
+    v1.8.5.3  
+    v1.8.5.4  
+    v1.8.5.5  
+    ```
+
+- **Required flag for wildcards**: To use a wildcard pattern, the `-l` or `--list` flag is necessary. Without it, the wildcard search won't work.
+
+- **Optional flag**: The `-l` or `--list` flag is optional when you are listing all tags without any pattern.
+
+- **Types of Tags in Git**:
+  - **Lightweight Tags**: A simple pointer to a specific commit, similar to a branch, but it doesn’t change.
+  - **Annotated Tags**: Stored as full objects in the Git database, containing:
+    - Tagger's name, email, and date.
+    - A tagging message.
+    - Can be signed and verified with GPG.
+
+- **Recommended Tag Type**: Annotated tags are generally recommended as they store more information and are verifiable.
+
+---
+
+### Annotated Tags
+- **Create an annotated tag**: Use `-a` and `-m` flags:
+  ```
+  $ git tag -a v1.4 -m "my version 1.4"
+  ```
+- **View all tags**:
+  ```
+  $ git tag
+  v0.1
+  v1.3
+  v1.4
+  ```
+- **View tag data**: Use `git show` to see tag information along with the commit:
+  ```
+  $ git show v1.4
+  tag v1.4
+  Tagger: Ben Straub <ben@straub.cc>
+  Date:   Sat May 3 20:19:12 2014 -0700
+
+  my version 1.4
+
+  commit ca82a6dff817ec66f44342007202690a93763949
+  Author: Scott Chacon <schacon@gee-mail.com>
+  Date:   Mon Mar 17 21:52:11 2008 -0700
+
+      Change version number
+  ```
+
+---
+
+### Lightweight Tags
+- **Create a lightweight tag**: No `-a`, `-s`, or `-m` options needed:
+  ```
+  $ git tag v1.4-lw
+  ```
+- **View all tags**:
+  ```
+  $ git tag
+  v0.1
+  v1.3
+  v1.4
+  v1.4-lw
+  v1.5
+  ```
+- **View lightweight tag**: `git show` only displays commit info (no extra tag details):
+  ```
+  $ git show v1.4-lw
+  commit ca82a6dff817ec66f44342007202690a93763949
+  Author: Scott Chacon <schacon@gee-mail.com>
+  Date:   Mon Mar 17 21:52:11 2008 -0700
+
+      Change version number
+  ```
+
+---
+
+### Tagging Later
+
+- **Tagging after the fact**: You can tag any commit, even if you've moved past it in your history.
+
+- **Example scenario**: Suppose you forgot to tag a commit (e.g., `v1.2`), but you want to do so later. Here's how you can add the tag after the commit:
+
+  - **View commit history** using `git log --pretty=oneline`:
+    ```
+    $ git log --pretty=oneline
+    15027957951b64cf874c3557a0f3547bd83b3ff6 Merge branch 'experiment'
+    a6b4c97498bd301d84096da251c98a07c7723e65 Create write support
+    0d52aaab4479697da7686c15f77a3d64d9165190 One more thing
+    ...
+    9fceb02d0ae598e95dc970b74767f19372d61af8 Update rakefile
+    964f16d36dfccde844893cac5b347e7b3d44abbc Commit the todo
+    8a5cbc430f1a9c3d00faaeffd07798508422908a Update readme
+    ```
+
+  - **Tag the commit**: Use the commit checksum (or part of it) at the end of the tag command:
+    ```
+    $ git tag -a v1.2 9fceb02
+    ```
+  
+  - **View all tags**:
+    ```
+    $ git tag
+    v0.1
+    v1.2
+    v1.3
+    v1.4
+    v1.4-lw
+    v1.5
+    ```
+
+  - **View tag details** using `git show`:
+    ```
+    $ git show v1.2
+    tag v1.2
+    Tagger: Scott Chacon <schacon@gee-mail.com>
+    Date:   Mon Feb 9 15:32:16 2009 -0800
+
+    version 1.2
+    commit 9fceb02d0ae598e95dc970b74767f19372d61af8
+    Author: Magnus Chacon <mchacon@gee-mail.com>
+    Date:   Sun Apr 27 20:43:35 2008 -0700
+
+        Update rakefile
+    ```
+
+---
+
+### Sharing Tags
+
+**Pushing tags to a remote**:
+- By default, `git push` does **not** push tags to remote servers. You need to explicitly push tags after creating them.
+
+**Push a single tag**:
+- To push a specific tag to a remote:
+  ```
+  $ git push origin v1.5
+  ```
+
+**Push all tags**:
+- To push all tags that haven't been pushed yet, use the `--tags` option:
+  ```
+  $ git push origin --tags
+  ```
+
+**Effect of pushing tags**: When you push tags, they become available on the remote, and others who clone or pull from your repository will get the tags too.
+
+**Tag types**: Both **lightweight** and **annotated** tags are pushed by `git push --tags`. However:
+- Use `git push <remote> --follow-tags` to only push **annotated** tags, excluding lightweight tags.
+
+**Example output**:
+- Pushing a single tag:
+  ```
+  $ git push origin v1.5
+  * [new tag] v1.5 -> v1.5
+  ```
+- Pushing all tags:
+  ```
+  $ git push origin --tags
+  * [new tag] v1.4 -> v1.4
+  * [new tag] v1.4-lw -> v1.4-lw
+  ```
+
+---
+
+### Deleting Tags
+
+**Deleting a local tag**:
+- To delete a tag from your local repository, use:
+  ```
+  $ git tag -d <tagname>
+  ```
+- Example:
+  ```
+  $ git tag -d v1.4-lw
+  Deleted tag 'v1.4-lw' (was e7d5add)
+  ```
+
+**Deleting a remote tag**:
+- Deleting a tag locally does not remove it from the remote server. There are two common methods to delete a remote tag:
+
+1. **First method**: Using the `:refs/tags/` syntax:
+   ```
+   $ git push origin :refs/tags/<tagname>
+   ```
+   - Example:
+     ```
+     $ git push origin :refs/tags/v1.4-lw
+     To /git@github.com:schacon/simplegit.git
+      - [deleted]         v1.4-lw
+     ```
+
+2. **Second method**: Using `--delete` flag (more intuitive):
+   ```
+   $ git push origin --delete <tagname>
+   ```
+   - Example:
+     ```
+     $ git push origin --delete v1.4-lw
+     ```
+
+---
+
+### Checking out Tags
+
+- You can view the version of files a tag is pointing to by using `git checkout <tagname>`:
+```
+$ git checkout v2.0.0
+Note: switching to 'v2.0.0'.
+```
+
+**Detached HEAD state**:
+- After checking out a tag, your repository enters the "detached HEAD" state.
+- In this state, you can:
+ - Look around, make experimental changes, and commit them.
+ - Any commits made won't be part of any branch and will be lost unless explicitly saved by creating a branch.
+
+**Creating a new branch**:
+- If you want to retain commits, create a new branch:
+ ```
+ $ git checkout -b <new-branch-name> <tagname>
+ ```
+ Example:
+ ```
+ $ git checkout -b version2 v2.0.0
+ Switched to a new branch 'version2'
+ ```
+
+**Handling new commits in detached HEAD**:
+- If you make changes and commit in the detached HEAD state without creating a branch, the commit won’t be part of any branch and will be unreachable except by the commit hash.
+- To avoid this, always create a branch before making changes if you want to keep your commits.
+
+**Undoing detached HEAD state**:
+- To undo the checkout and return to the previous branch:
+ ```
+ $ git switch -
+ ```
+
+**Configuring detached HEAD advice**:
+- You can turn off the detached HEAD advice by setting the configuration variable:
+ ```
+ git config advice.detachedHead false
+ ```
+
+---
+
+## Git Aliasing
+
+**Git Aliases**: Aliases allow you to shorten commonly used Git commands, making your workflow faster and easier.
+
+**Setting up aliases**: Use `git config --global alias.<alias-name> <command>` to create an alias. Some common examples:
+- `git commit` as `git ci`:
+  ```
+  $ git config --global alias.ci commit
+  ```
+- `git checkout` as `git co`:
+  ```
+  $ git config --global alias.co checkout
+  ```
+- `git branch` as `git br`:
+  ```
+  $ git config --global alias.br branch
+  ```
+- `git status` as `git st`:
+  ```
+  $ git config --global alias.st status
+  ```
+
+**Creating custom aliases**:
+- You can create aliases for commands that don’t exist by default, like unstaging a file:
+  ```
+  $ git config --global alias.unstage 'reset HEAD --'
+  ```
+  Now, `git unstage <file>` is equivalent to `git reset HEAD -- <file>`.
+
+**Alias for the last commit**:
+- To quickly view the last commit, you can create an alias like:
+  ```
+  $ git config --global alias.last 'log -1 HEAD'
+  ```
+- Then, use `git last` to see the most recent commit.
+
+**Running external commands with aliases**:
+- You can run external commands by starting the alias with a `!`. For example, to use `gitk` with `git visual`:
+  ```
+  $ git config --global alias.visual '!gitk'
+  ```
+- Now, `git visual` runs `gitk`, which is an external tool for visualizing the Git history.
+
+---
