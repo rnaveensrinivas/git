@@ -13,10 +13,7 @@ This chapter covers the basics of **Git** and version control, explaining differ
   - [Types of Version Control Systems](#types-of-version-control-systems)
     - [1. Local Version Control Systems](#1-local-version-control-systems)
     - [2. Centralized Version Control Systems (CVCS)](#2-centralized-version-control-systems-cvcs)
-      - [Advantages](#advantages)
-      - [Disadvantages](#disadvantages)
     - [3. Distributed Version Control Systems (DVCS)](#3-distributed-version-control-systems-dvcs)
-      - [Advantages:](#advantages-1)
   - [Git](#git)
     - [A Short History of Git](#a-short-history-of-git)
     - [What is Git?](#what-is-git)
@@ -35,6 +32,7 @@ This chapter covers the basics of **Git** and version control, explaining differ
     - [Configuring Default Editor](#configuring-default-editor)
     - [Default Branch Name](#default-branch-name)
     - [Checking Settings](#checking-settings)
+    - [A Sample Configuration](#a-sample-configuration)
   - [Getting Help in Git](#getting-help-in-git)
   - [Summary](#summary)
 
@@ -61,7 +59,7 @@ While Git is often associated with managing software source code, version contro
 - Web design: Managing iterations of a site’s design or content.
 - Writing and documentation: Tracking drafts and revisions.
 
-It can basically track any type of file on a computer. 
+Git can basically track *any type* of file on a computer. 
 
 ---
 
@@ -84,7 +82,7 @@ It can basically track any type of file on a computer.
             Local Computer
             --------------
 
-                    _____________________
+                    ---------------------
   Checkout          |  Version Database |
                     |-------------------|           
                     |                   |
@@ -93,7 +91,7 @@ It can basically track any type of file on a computer.
                     |      Version 2    |
                     |         |         |
                     |      Version 1    |
-                    |___________________|
+                    ---------------------
   ```
 
 ---
@@ -103,31 +101,30 @@ It can basically track any type of file on a computer.
 - **Purpose:** Enables collaboration across multiple developers by storing versioned files on a **single central server**.  
 - **Examples:** CVS, Subversion, Perforce.  
 
-#### Advantages
+**Advantages**
 - Team visibility: Everyone can see what others are working on.  
 - Centralized control: Administrators can manage permissions and access.  
 - Simplicity: Easier to manage compared to individual local databases.  
 
-#### Disadvantages
+**Disadvantages**
 - **Single Point of Failure:**  
   - If the server goes down, collaboration halts, and changes cannot be saved.  
   - Corrupted server data without proper backups leads to complete loss of project history.  
-- Risk of losing everything, when entire project history stored in one place. Even LocalVCSs are prone to this. 
+- Risk of losing everything, when entire project history stored in one place. Even Local VCSs are prone to this. 
 
   ```plaintext
-              Shared Repository
-              -----------------
-              |  Version 3    |
-              |  Version 2    |
-              |  Version 1    |
-              -----------------
-                      ^
-                      |
-      ---------------------------------
-      |               |               |
-  Developer 1    Developer 2    Developer 3
-  (Working Dir)  (Working Dir)  (Working Dir)
-
+               Shared Repository
+               -----------------
+               |  Version 3    |
+               |  Version 2    |
+               |  Version 1    |
+               -----------------
+                       ^
+                       |
+       ---------------------------------
+       |               |               |
+   Developer 1     Developer 2     Developer 3
+  (Working Dir)   (Working Dir)   (Working Dir)
   ```
 ---
 
@@ -135,7 +132,7 @@ It can basically track any type of file on a computer.
 
 - **Definition:** Every client fully mirrors the repository, including its **entire history**.  
 
-#### Advantages:  
+**Advantages**  
 - **Full Backups:**  
   - Each clone is a complete backup of the repository.  
   - If the central server fails, any client can restore it.  
@@ -146,15 +143,15 @@ It can basically track any type of file on a computer.
   - Git, Mercurial, Darcs.  
 
   ```plaintext
-                    Server Computer
-                  --------------------
-                  | Version Database |  
-                  |    Version 3     |
-                  |    Version 2     | 
-                  |    Version 1     |
-                  --------------------
-                          /   \ 
-                        /     \
+                     Server Computer
+                   --------------------
+                   | Version Database |  
+                   |    Version 3     |
+                   |    Version 2     | 
+                   |    Version 1     |
+                   --------------------
+                         /     \ 
+                        /       \
     --------------------         --------------------
     |    Computer A    |         |    Computer B    |
     |                  |         |                  |
@@ -162,7 +159,7 @@ It can basically track any type of file on a computer.
     |        ^         |         |        ^         |
     |        |         |         |        |         |
     | Version Database |         | Version Database |    
-    |    Version 3     | ------  |    Version 3     |
+    |    Version 3     | ------- |    Version 3     |
     |    Version 2     |         |    Version 2     |  
     |    Version 1     |         |    Version 1     |
     --------------------         --------------------
@@ -175,7 +172,7 @@ It can basically track any type of file on a computer.
 ### A Short History of Git  
 
 - **Early Years (1991–2002):**  
-  - Linux kernel changes were shared as **patches** (a file that contains the differences (or changes) between two versions of a file or set of files) and **archived files** (`.zip`, `.tar`, or `.tar.gz`).  
+  - In those days, Linux kernel changes were shared as **patches** (a file that contains the differences (or changes) between two versions of a file or set of files) and **archived files** (`.zip`, `.tar`, or `.tar.gz`).  
 
 - **2002:**  
   - Linux kernel project adopted **BitKeeper**, a proprietary DVCS.  
@@ -295,7 +292,7 @@ It can basically track any type of file on a computer.
 
 - **Three Main Sections of a Git Project:**  
   - **Working Tree:** A checkout of one version of the project, pulled out of the compressed `.git` database, where you modify files.  
-  - **Staging Area:** Stores information about what will go into the next commit. Known as the "**index**."  
+  - **Staging Area:** Stores information about what will go into the next commit. Known as the **index**.  
   - **Git Directory:** Stores metadata and the object database; crucial for the project and copied when **cloning** a repository.  
 
 - **Basic Git Workflow:**  
@@ -384,6 +381,64 @@ $ sudo apt install git-all -y
 - Duplicate keys may appear when values are read from multiple files; Git uses the **last value encountered**.
 - GUI tools often assist in initial setup.
 
+### A Sample Configuration
+```bash
+$ git config --list
+# system config - empty
+
+# global config
+user.name=rnaveensrinivas
+user.email=rnaveensrinivas@gmail.com
+core.editor=code --wait
+url.git@github.com:.insteadof=https://github.com/
+init.defaultbranch=main
+
+# repo config
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/rnaveensrinivas/Git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.vscode-merge-base=origin/main
+branch.main.merge=refs/heads/main
+branch.progit.remote=origin
+branch.progit.merge=refs/heads/progit
+branch.progit.vscode-merge-base=origin/main
+
+$ cat /usr/gitconfig # system config - empty
+
+$ cat ~/.gitconfig # global config
+[user]
+	name = rnaveensrinivas
+	email = rnaveensrinivas@gmail.com
+[core]
+	editor = code --wait
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[init]
+	defaultBranch = main`
+
+$ cat .git/config # repo config
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/rnaveensrinivas/Git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	vscode-merge-base = origin/main
+	merge = refs/heads/main
+[branch "progit"]
+	remote = origin
+	merge = refs/heads/progit
+	vscode-merge-base = origin/main
+
+```
 ---
 
 ## Getting Help in Git
@@ -398,15 +453,15 @@ $ sudo apt install git-all -y
 
 ---
 
-## Summary:
+## Summary
 
 Version control systems (VCS) track changes to files, allowing easy reversion and collaboration. There are three types:
 
 1. **Local VCS** (e.g., RCS) tracks changes on a single computer, but lacks collaboration features and is prone to errors.
-2. **Centralized VCS** (e.g., CVS, Subversion) stores files on a central server, enabling collaboration but risking data loss if the server fails.
+2. **Centralized VCS** (e.g., CVS, Subversion) stores files on a central server, enabling collaboration but risking data loss if the server fails. They are also called **delta-based version control**.
 3. **Distributed VCS** (e.g., Git, Mercurial) allows each client to store a full repository, offering better backup, collaboration, and flexibility.
 
-Git is a fast, distributed version control system (DVCS) created by Linus Torvalds in 2005 after the relationship with BitKeeper, a proprietary version control system that stored Linux Kernel code, ended. Unlike other systems that store incremental file changes, Git stores full snapshots of the project at each commit, which makes retrieving previous versions efficient. Git operates mostly locally, allowing for offline work and faster execution. Every file in Git is checksummed using SHA-1 hashes, ensuring data integrity. Git is designed to add data rather than removing it, making recovery of lost data easy. Files in Git exist in three states: **Modified** (changes not staged or committed), **Staged** (changes ready for commit), and **Committed** (changes stored in the local repository). Git’s full functionality is available via the command line, offering a more flexible and complete experience than graphical interfaces.
+Git is a fast, distributed version control system (DVCS) created by Linus Torvalds in 2005 after the relationship with BitKeeper, a proprietary version control system that stored Linux Kernel code, ended. Unlike other systems that store incremental file changes, Git stores full snapshots of the project at each commit, which makes retrieving previous versions efficient. Git operates mostly locally, allowing for offline work and faster execution. Every file in Git is checksummed using SHA-1 hashes, ensuring data integrity. Git is designed to add data rather than removing it, making recovery of lost data easy. Files in Git exist in three states: **Modified** (changes not staged or committed), **Staged** (changes ready for commit, also called **index**), and **Committed** (changes stored in the local repository). Git’s full functionality is available via the command line, offering a more flexible and complete experience than graphical interfaces.
 
 Here is a summary of all the commands: 
 | Command                                              | Description                                                                                      |
@@ -416,9 +471,9 @@ Here is a summary of all the commands:
 | `$ sudo apt install git -y`                          | Installs the core Git package with basic tools and utilities.                                    |
 | `$ sudo apt install git-all -y`                      | Installs Git along with all related tools and utilities.                                         |
 | `$ git --version`                                    | Displays the installed Git version.                                                              |
-| `$ git config --local <key> <value>`                  | Configures a Git setting for the current repository (affects `./git/config`).                    |
 | `$ git config --system <key> <value>`                | Configures a Git setting system-wide (affects `/etc/gitconfig`).                                 |
 | `$ git config --global <key> <value>`                | Configures a Git setting globally for the user (affects `~/.gitconfig`).                         |
+| `$ git config --local <key> <value>`                  | Configures a Git setting for the current repository (affects `./git/config`).                    |
 | `$ git config --global user.name "John Doe"`         | Sets the global user name for Git commits.                                                       |
 | `$ git config --global user.email johndoe@example.com`| Sets the global user email for Git commits.                                                      |
 | `$ git config --global core.editor "code --wait"`     | Specifies the default text editor for Git (e.g., `code --wait` for VS Code).                    |
@@ -427,6 +482,9 @@ Here is a summary of all the commands:
 | `$ git config --list --show-origin`                  | Lists all Git configuration settings with their source files.                                    |
 | `$ git config <key>`                                 | Shows the value of a specific configuration key.                                                 |
 | `$ git config <key> --show-origin`                   | Shows the origin of a specific configuration key.                                                |
+| `$ cat /usr/gitconfig`                               | Show the `system` configuration file, set with `--system`                                        |
+| `$ cat ~/.gitconfig`                                 | Show the `global/user` configuration file, set with `--global`                                   |
+| `$ cat .git/config`                                  | Show the `repo` configuration file, set with `--local`                                           |
 | `$ git help <verb>`                                  | Displays the manual page for a Git command.                                                      |
 | `$ git <verb> --help`                                | Displays the help message for a Git command.                                                     |
 | `$ man git-<verb>`                                   | Displays the manual page for a specific Git command.                                             |
