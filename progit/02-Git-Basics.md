@@ -1,7 +1,9 @@
-# Git Basics
+# Chapter 2: Git Basics
+
+If you read one Git chapter, make it this one. It covers essential commands for configuring, initializing, tracking, staging, committing, ignoring files, undoing mistakes, browsing history, and syncing with remote repositories.
 
 ## Table of Contents
-- [Git Basics](#git-basics)
+- [Chapter 2: Git Basics](#chapter-2-git-basics)
   - [Table of Contents](#table-of-contents)
   - [Getting a Git Repository](#getting-a-git-repository)
     - [1. Initializing a Repository in an Existing Directory:](#1-initializing-a-repository-in-an-existing-directory)
@@ -18,10 +20,11 @@
     - [Removing Files](#removing-files)
     - [Moving Files](#moving-files)
   - [Viewing the Commit History](#viewing-the-commit-history)
-    - [`git log`:](#git-log)
-    - [`git log -p` or `git log --patch`:](#git-log--p-or-git-log---patch)
+    - [`git log`](#git-log)
+    - [`git log -p` or `git log --patch`](#git-log--p-or-git-log---patch)
     - [`git log --stat`](#git-log---stat)
     - [`git log --pretty`](#git-log---pretty)
+    - [A list of common placeholders for `--pretty`:](#a-list-of-common-placeholders-for---pretty)
     - [`--graph` option](#--graph-option)
     - [Difference between 'Author' and 'Committer'](#difference-between-author-and-committer)
     - [More options for `git log`](#more-options-for-git-log)
@@ -46,6 +49,10 @@
     - [Deleting Tags](#deleting-tags)
     - [Checking out Tags](#checking-out-tags)
   - [Git Aliasing](#git-aliasing)
+  - [Summary](#summary)
+    - [Summary of Commands](#summary-of-commands)
+
+---
 
 ## Getting a Git Repository
 
@@ -63,7 +70,7 @@
   $ git init
   ```
   - This creates a `.git` subdirectory containing the repository's necessary files.
-- If you want to track existing files, use `git add` to stage files and commit:
+- If you want to **track** existing files, use `git add` to stage files and commit:
   ```
   $ git add *.c
   $ git add LICENSE
@@ -135,7 +142,7 @@ When a repository is cloned, all files start as tracked and unmodified. As you m
 
 - **Default Branch Name**:  
   - Historically, the default branch name was `master`.  
-  - GitHub changed the default branch name to `main` in mid-2020, with other hosts following suit.  
+  - GitHub changed the default branch name to `main` in **mid-2020**, with other hosts following suit.  
   - The default branch name can be customized, so it may vary in newly created repositories.  
 
 - **Book's Convention**: Despite changes, the book uses `master` as the default branch name for consistency.
@@ -410,7 +417,7 @@ doc/**/*.pdf
 
 
 **View staged changes with `git diff --staged`:**
-- Use `git diff --staged` (or `git diff --staged`, as they are synonyms) to see changes that are staged for the next commit, comparing them to the **last commit**.
+- Use `git diff --staged` (or `git diff --cached`, as they are synonyms) to see changes that are staged for the next commit, comparing them to the **last commit**.
   ```bash
   $ git diff --staged
   diff --git a/README b/README
@@ -430,7 +437,6 @@ doc/**/*.pdf
 ---
 
 ### Commiting Your Changes
-
 
 - Before committing, ensure that all the changes you want to keep in the commit are staged using `git add`.
 - Unstaged files (those not added with `git add`) will not be included in the commit.
@@ -598,7 +604,7 @@ The `git rm` command is used to remove files from Git, and it offers various opt
 
 ## Viewing the Commit History
 
-### `git log`: 
+### `git log`
 - Used to view commit history in a repository.
 - Displays commits in reverse chronological order (most recent first).
 - Output includes:
@@ -617,7 +623,7 @@ The `git rm` command is used to remove files from Git, and it offers various opt
 
 ---
 
-### `git log -p` or `git log --patch`:
+### `git log -p` or `git log --patch`
 - `-p` or `--patch`: Shows the differences (patch output) introduced in each commit.
 - Example: 
   ```
@@ -738,24 +744,25 @@ The `git rm` command is used to remove files from Git, and it offers various opt
     - `%ar`: Relative date (e.g., "6 years ago")
     - `%s`: Commit message
 
-- Here is a list of common placeholders for `--pretty`: 
-  | Specifier | Description of Output                     |
-  |-----------|-------------------------------------------|
-  | `%H`      | Commit hash                               |
-  | `%h`      | Abbreviated commit hash                   |
-  | `%T`      | Tree hash                                 |
-  | `%t`      | Abbreviated tree hash                     |
-  | `%P`      | Parent hashes                             |
-  | `%p`      | Abbreviated parent hashes                 |
-  | `%an`     | Author name                               |
-  | `%ae`     | Author email                              |
-  | `%ad`     | Author date (format respects the `--date=` option) |
-  | `%ar`     | Author date, relative                     |
-  | `%cn`     | Committer name                            |
-  | `%ce`     | Committer email                           |
-  | `%cd`     | Committer date                            |
-  | `%cr`     | Committer date, relative                  |
-  | `%s`      | Subject                                   |
+### A list of common placeholders for `--pretty`: 
+
+| Specifier | Description of Output                     |
+|-----------|-------------------------------------------|
+| `%H`      | Commit hash                               |
+| `%h`      | Abbreviated commit hash                   |
+| `%T`      | Tree hash                                 |
+| `%t`      | Abbreviated tree hash                     |
+| `%P`      | Parent hashes                             |
+| `%p`      | Abbreviated parent hashes                 |
+| `%an`     | Author name                               |
+| `%ae`     | Author email                              |
+| `%ad`     | Author date (format respects the `--date=` option) |
+| `%ar`     | Author date, relative                     |
+| `%cn`     | Committer name                            |
+| `%ce`     | Committer email                           |
+| `%cd`     | Committer date                            |
+| `%cr`     | Committer date, relative                  |
+| `%s`      | Subject                                   |
 
 ---
 
@@ -1630,5 +1637,84 @@ Note: switching to 'v2.0.0'.
   $ git config --global alias.visual '!gitk'
   ```
 - Now, `git visual` runs `gitk`, which is an external tool for visualizing the Git history.
+
+---
+
+## Summary
+
+At this point, you can do all the basic local Git operations — creating or cloning a repository, making changes, staging and committing those changes, and viewing the history of all the changes the repository has been through. Next, we’ll cover Git’s killer feature: its branching model.
+
+### Summary of Commands
+
+| Command | Description |
+|---------|------------|
+| `git init` | Initialize a new Git repository. |
+| `git add <file/directory>` | Add a file or directory to the staging area. |
+| `git clone <url> directory_name` | Clone a repository into a specific directory. |
+| `git status` | Show the working tree status. |
+| `git status -s` | Show a short status output. |
+| `git diff` | Show unstaged changes. |
+| `git diff --cached / --staged` | Show staged changes. |
+| `git commit` | Commit staged changes. |
+| `git commit -v` | Show commit diff while committing. |
+| `git commit -m "<message>"` | Commit with a message. |
+| `git commit -a` | Stage and commit all tracked files. |
+| `git commit -a -m "<message>"` | Stage and commit with a message. |
+| `rm <file> && git add .` | Remove a file and stage the change. |
+| `git rm <file>` | Remove a file from the working directory and Git. |
+| `git rm -f <file>` | Force remove a file. |
+| `git rm --cached <file>` | Remove a file from Git but keep it locally. |
+| `git rm <regular pattern>` | Remove files matching a pattern. |
+| `git mv <from> <to>` | Rename/move a file. |
+| `mv README.md README; git rm README.md; git add README` | Rename a file using standard shell commands and Git. |
+| `git log` | Show commit history. |
+| `git log -p` or `git log --patch` | Show commit differences. |
+| `git log --stat` | Show commit stats. |
+| `git log --pretty=<something>` | Customize log output. |
+| `git log --pretty=oneline` | Show logs in a single line. |
+| `git log --pretty=format"%h ..."` | Show custom log format. |
+| `git log --graph` | Show commits as a graph. |
+| `git log --pretty=oneline --graph` | Show a one-line graph view. |
+| `git log -<n>` | Show last `n` commits. |
+| `git log --since=<commit/date> --until=<commit/date>` | Filter logs by date/commit. |
+| `git log --author=<name>` | Show commits by an author. |
+| `git log --grep=<pattern>` | Show commits matching a pattern. |
+| `git log -S <keyword>` | Show commits adding/removing a keyword. |
+| `git log -- <path/to/file>` | Show file-specific history. |
+| `git commit --amend` | Edit the last commit. |
+| `git reset HEAD <file>` or `git restore --cached / --staged <file>` | Unstage a file. |
+| `git checkout -- <file>` or `git restore <file>` | Discard local changes. |
+| `git remote` | Show remote repositories. |
+| `git remote -v` | Show remote URLs. |
+| `git remote add <short_name> url` | Add a remote repository. |
+| `git fetch <short_name>` | Fetch changes from a remote. |
+| `git push <short_name> <branch>` | Push changes to a remote branch. |
+| `git fetch <remote>` | Fetch all changes from a remote. |
+| `git merge <remote>/<branch>` | Merge remote branch into local. |
+| `git push <remote> <branch>` | Push a branch to a remote. |
+| `git remote show <remote>` | Show remote details. |
+| `git remote rename <old_remote_name> <new_remote_name>` | Rename a remote. |
+| `git remote remove <remote_name>` or `git remote rm <remote_name>` | Remove a remote. |
+| `git tag` | List all tags. |
+| `git tag <lightWeightTagName> [commit-hash]` | Create a lightweight tag. |
+| `git tag -l/--list "<pattern>"` | List tags matching a pattern. |
+| `git tag -a <annotatedTagName> -m "<Message>" [commit-hash]` | Create an annotated tag. |
+| `git show <annotatedTagName>` | Show tag details. |
+| `git push <remote> <tagName>` | Push a tag to a remote. |
+| `git push <remote> --tags` | Push all tags to a remote. |
+| `git push <remote> --follow-tags` | Push only annotated tags. |
+| `git tag -d <tagName>` | Delete a tag locally. |
+| `git push <remote> --delete <tagName>` | Delete a tag remotely. |
+| `git checkout <tagName>` | Checkout a tag. |
+| `git checkout -b <new-branch-name> <tagname>` | Create a new branch from a tag. |
+| `git switch -` | Switch to the previous branch. |
+| `git config --global alias.<alias-name> <command>` | Create a Git alias. |
+| `git config --global alias.<alias-name> "!<terminal commands>"` | Create an alias for shell commands. |
+| `git config --global advice.detachedHead "false"/"true"` | Enable/disable detached head warnings. |
+| `git config --global pull.rebase "false"/"true"` | Configure pull behavior. |
+
+Also take a look at  
+- `git log -pretty` [placeholders](#a-list-of-common-placeholders-for---pretty).  
+- `git log` [options](#more-options-for-git-log).
 
 ---
