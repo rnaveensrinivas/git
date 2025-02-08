@@ -1,10 +1,5 @@
-# Chapter 2: Git Basics
-
-If you read one Git chapter, make it this one. It covers essential commands for configuring, initializing, tracking, staging, committing, ignoring files, undoing mistakes, browsing history, and syncing with remote repositories.
-
-## Table of Contents
+### Table of Contents
 - [Chapter 2: Git Basics](#chapter-2-git-basics)
-  - [Table of Contents](#table-of-contents)
   - [Getting a Git Repository](#getting-a-git-repository)
     - [1. Initializing a Repository in an Existing Directory:](#1-initializing-a-repository-in-an-existing-directory)
     - [2. Cloning an Existing Repository:](#2-cloning-an-existing-repository)
@@ -53,6 +48,9 @@ If you read one Git chapter, make it this one. It covers essential commands for 
     - [Summary of Commands](#summary-of-commands)
 
 ---
+# Chapter 2: Git Basics
+
+If you read one Git chapter, make it this one. It covers essential commands for configuring, initializing, tracking, staging, committing, ignoring files, undoing mistakes, browsing history, and syncing with remote repositories.
 
 ## Getting a Git Repository
 
@@ -514,7 +512,7 @@ To skipping the staging area, use `-a` option, when you want to commit all chang
 - If you have files in staged, git will add them also to the commit. 
 
 **When to Use `git commit -a`**:
- - This is especially useful when you’ve made changes to files that are already tracked by Git, and you **don’t want to manually stage** them before committing.
+ - This is especially useful when you've made changes to files that are already tracked by Git, and you **don't want to manually stage** them before committing.
  - However, it only works for modified files that Git is already tracking. New files (untracked files) **will not be included** in the commit with `git commit -a`. You would still need to use `git add` for those.
 
 ---
@@ -559,7 +557,7 @@ The `git rm` command is used to remove files from Git, and it offers various opt
   $ git rm --cached README
   ```
 
-- This removes the file from Git’s tracking but keeps it in your working directory.
+- This removes the file from Git's tracking but keeps it in your working directory.
 - Makes the file **untracked**. 
 
 **Removing Multiple Files Using Globs:**
@@ -578,10 +576,10 @@ The `git rm` command is used to remove files from Git, and it offers various opt
 
 ### Moving Files
 
-- **No explicit tracking of file movement**: Git doesn’t store metadata to track file renaming. But Git is smart enough to figure it out.
+- **No explicit tracking of file movement**: Git doesn't store metadata to track file renaming. But Git is smart enough to figure it out.
 - **Git mv command**: 
   - `git mv file_from file_to` renames a file and **stages** it for commit.
-  - It’s a convenience function, which combines the steps of moving and staging.
+  - It's a convenience function, which combines the steps of moving and staging.
   ```bash
   $ git mv README.md README
   $ git status
@@ -609,7 +607,7 @@ The `git rm` command is used to remove files from Git, and it offers various opt
 - Displays commits in reverse chronological order (most recent first).
 - Output includes:
   - SHA-1 checksum of the commit
-  - Author’s name and email
+  - Author's name and email
   - Date of the commit
   - Commit message
 
@@ -805,8 +803,6 @@ The `git rm` command is used to remove files from Git, and it offers various opt
 
 ### More options for `git log`
 
-Here is the information as a Markdown table:
-
 | Option             | Description                                                                 |
 |--------------------|-----------------------------------------------------------------------------|
 | `-p`               | Show the patch introduced with each commit.                                 |
@@ -907,13 +903,13 @@ Be cautious when undoing changes in Git as it can lead to data loss if done inco
   - **Clean up commit history**: Amend to make small improvements without cluttering the history with unnecessary "Oops" commits.
   
 - **Important considerations**:
-  - **Local commits only**: Amend only commits that haven’t been pushed to a remote repository. Amending pushed commits and force-pushing can cause issues for collaborators.
+  - **Local commits only**: Amend only commits that haven't been pushed to a remote repository. Amending pushed commits and force-pushing can cause issues for collaborators.
 
 ### Undoing Staged Files
 
 - `git status` helps track the state of your staging area and working directory. It also provides **hints** on how to undo changes.
   
-- If you accidentally stage files you didn’t intend to commit, you can unstage them using:
+- If you accidentally stage files you didn't intend to commit, you can unstage them using:
   ```bash
   git reset HEAD <file>
   ```
@@ -958,7 +954,7 @@ Be cautious when undoing changes in Git as it can lead to data loss if done inco
 
 - **Warning: This command is destructive**  
   - `git checkout -- <file>` permanently removes local changes.  
-  - Only use it if you are sure you don’t need those modifications.  
+  - Only use it if you are sure you don't need those modifications.  
 
 - **Alternative approaches**  
   - If you want to keep changes but temporarily set them aside, consider:  
@@ -1005,7 +1001,7 @@ Be cautious when undoing changes in Git as it can lead to data loss if done inco
 
 - **Warning: `git restore` is destructive**  
   - `git restore <file>` **permanently removes local changes**.  
-  - Use this command only if you are **sure** you don’t need those modifications.
+  - Use this command only if you are **sure** you don't need those modifications.
 
 ---
 
@@ -1068,7 +1064,7 @@ Be cautious when undoing changes in Git as it can lead to data loss if done inco
   ```
 
   - This setup allows pulling contributions from multiple sources.  
-  - Push access depends on permissions, which **isn’t shown** in this command output.  
+  - Push access depends on permissions, which **isn't shown** in this command output.  
 
 - **Different Remote Protocols**  
   - Remotes can use different protocols, such as:  
@@ -1225,7 +1221,7 @@ $ git remote show origin
 
 **Understanding the Output**  
 
-- **Fetch & Push URL**: The repository’s location for pulling and pushing updates.  
+- **Fetch & Push URL**: The repository's location for pulling and pushing updates.  
 - **HEAD branch**: The main branch the remote repository points to.  
 - **Remote branches**: Lists branches that exist on the remote.  
 - **Local branch configured for `git pull`**: Specifies which local branch will merge with its remote counterpart when pulling.  
@@ -1327,7 +1323,7 @@ origin
 
 ## Tagging
 
-Git has the ability to tag specific points in a repository’s history as being important. Typically, people use this functionality to mark release points (v1.0, v2.0 and so on).
+Git has the ability to tag specific points in a repository's history as being important. Typically, people use this functionality to mark release points (v1.0, v2.0 and so on).
 
 - **Listing existing tags**: Use the command `git tag` to list all tags in the repository.
   - Example:  
@@ -1360,7 +1356,7 @@ Git has the ability to tag specific points in a repository’s history as being 
 - **Optional flag**: The `-l` or `--list` flag is optional when you are listing all tags without any pattern.
 
 - **Types of Tags in Git**:
-  - **Lightweight Tags**: A simple pointer to a specific commit, similar to a branch, but it doesn’t change.
+  - **Lightweight Tags**: A simple pointer to a specific commit, similar to a branch, but it doesn't change.
   - **Annotated Tags**: Stored as full objects in the Git database, containing:
     - Tagger's name, email, and date.
     - A tagging message.
@@ -1578,7 +1574,7 @@ Note: switching to 'v2.0.0'.
  ```
 
 **Handling new commits in detached HEAD**:
-- If you make changes and commit in the detached HEAD state without creating a branch, the commit won’t be part of any branch and will be unreachable except by the commit hash.
+- If you make changes and commit in the detached HEAD state without creating a branch, the commit won't be part of any branch and will be unreachable except by the commit hash.
 - To avoid this, always create a branch before making changes if you want to keep your commits.
 
 **Undoing detached HEAD state**:
@@ -1618,7 +1614,7 @@ Note: switching to 'v2.0.0'.
   ```
 
 **Creating custom aliases**:
-- You can create aliases for commands that don’t exist by default, like unstaging a file:
+- You can create aliases for commands that don't exist by default, like unstaging a file:
   ```
   $ git config --global alias.unstage 'reset HEAD --'
   ```
@@ -1641,8 +1637,24 @@ Note: switching to 'v2.0.0'.
 ---
 
 ## Summary
+A Git repository can be obtained in two ways: by initializing a new repository in an existing directory using `git init` or by cloning an existing repository with `git clone`. To initialize a repository, navigate to the project directory and run `git init`, which creates a `.git` subdirectory. Existing files can be tracked using `git add` and committed with `git commit`. Cloning a repository copies the entire project history, including all file versions, using `git clone <url>`, which creates a directory with the repository contents. A custom directory name can be specified as an optional argument. Git supports multiple transfer protocols, including HTTPS, SSH, and Git, allowing flexible repository management.
 
-At this point, you can do all the basic local Git operations — creating or cloning a repository, making changes, staging and committing those changes, and viewing the history of all the changes the repository has been through. Next, we’ll cover Git’s killer feature: its branching model.
+Once a Git repository is set up, files in the working directory can be either **tracked** (included in the last commit or staged) or **untracked** (new files not yet added to version control). Tracked files can be **unmodified**, **modified**, or **staged**. When changes are made, Git marks files as modified, and users must explicitly stage (`git add`) and commit (`git commit`) them to record a snapshot. This structured workflow prevents accidental inclusion of unwanted files. The `git status` command shows the state of the working directory and staging area. After cloning a repository, it typically reports a clean working tree. By default, Git's main branch was historically named `master`, but many platforms now use `main`. When a new file is added, it appears as **untracked** in `git status`, and Git does not automatically track new files to prevent accidental commits.
+
+To track a new file, use `git add <filename>`, which moves it to the **staged** state. Running `git status` then shows the file under **"Changes to be committed"**. If a tracked file is modified, it appears as **"Changes not staged for commit"**, requiring it to be staged again using `git add`. If a staged file is edited again, the new changes remain **unstaged**, necessitating another `git add` to include them in the next commit. For a compact file status overview, `git status -s` provides a short-form output with symbols indicating file states. Additionally, a `.gitignore` file specifies files and patterns Git should ignore, such as log files or compiled binaries. It supports glob patterns (e.g., `*.o`, `**/*.log`) and allows exceptions using `!`. GitHub provides `.gitignore` templates for various languages, helping streamline the process of excluding unnecessary files from version control.
+
+Before committing, all desired modifications should be staged. Running `git commit` without options opens an editor to write a commit message, while `git commit -m "message"` allows inline commit messages. Only staged changes are included in the commit, ensuring control over what gets recorded. Git provides several powerful options for viewing commit history, with `git log` being the most fundamental, displaying commits in reverse chronological order along with essential details like commit SHA, author, date, and commit message. By using options like `-p` or `--patch`, users can see the actual changes introduced in each commit, making it useful for reviewing modifications. Additionally, `--stat` summarizes file modifications by showing the number of insertions and deletions per file, which helps in quickly assessing the scope of changes.
+
+For customized log output, `git log --pretty` allows formatting commit history in different styles such as `oneline`, `short`, `full`, or `format`, where users can define placeholders like commit hash (`%h`), author name (`%an`), and commit message (`%s`). The `--graph` option further enhances readability by visually representing branches and merges using ASCII graphics, which is particularly useful for understanding a repository's branching structure. Git also provides various filtering options to narrow down commit history. Users can limit the number of commits displayed with `-n`, or filter commits based on date ranges using `--since` and `--until`. Additional options like `--author` filter commits by a specific contributor, while `--grep` searches for keywords in commit messages. The `-S` (pickaxe) option helps identify commits where a specific string was added or removed, making it useful for tracking changes to functions or variables. Another useful filtering approach is limiting the log to specific files or directories by appending the file path after the command. Moreover, merge commits can be excluded using `--no-merges`, helping focus on meaningful changes rather than repository management commits. Combining multiple filters, such as author, date range, and specific paths, allows for highly refined searches, making `git log` a versatile tool for examining commit history efficiently.
+
+Undoing changes in Git requires caution to prevent data loss. Amending commits with `git commit --amend` allows modifying the last commit, such as adding missing files or fixing messages, but should only be done on local commits to avoid issues with pushed changes. To unstage files mistakenly added, `git reset HEAD <file>` safely removes them from the staging area without affecting the working directory. If a modified file needs to be restored to its last committed state, `git checkout -- <file>` or `git restore <file>` can be used, but both permanently discard changes. The newer `git restore --staged <file>` provides a safer alternative to `git reset` for unstaging files. Always check `git status` for guidance before executing these commands, and consider stashing or branching if changes need to be saved temporarily.
+
+Remote repositories are versions of a project stored on the Internet or a network, enabling collaboration by allowing pushing and pulling of data. Managing remotes involves adding, removing, and tracking branches to streamline project development. Even if hosted on the same machine, a repository can function as a remote, supporting standard Git operations. To view remote repositories configured in a project, the `git remote` command lists available remotes, with `origin` being the default when cloning. The `git remote -v` command provides fetch and push URLs, useful when working with multiple remotes. Different protocols such as HTTPS, SSH, and the Git protocol allow connectivity with remote repositories.
+
+Adding a new remote requires `git remote add <shortname> <url>`, followed by verification using `git remote -v`. The `git fetch <remote>` command retrieves new branches and updates without merging, whereas `git pull <remote> <branch>` both fetches and merges changes. Tracking remote branches allows for seamless updates, and Git configurations like `pull.rebase` influence merge behavior. Pushing changes to a remote involves `git push <remote> <branch>`, ensuring the latest changes are available. If a push is rejected, fetching and merging remote updates before pushing again resolves conflicts. The `git remote show <remote>` command provides detailed insights into remote repositories, including branch tracking and push configurations. To maintain clean remote references, stale branches can be pruned using `git remote prune <remote>`. Renaming a remote with `git remote rename <old> <new>` updates all associated configurations, while `git remote remove <remote>` removes an unnecessary remote, deleting its tracking branches. These operations ensure a well-organized and efficient remote repository setup.
+
+Git provides **tagging** functionality to mark important points in a repository's history, commonly used for version releases. Tags can be **lightweight** (just a reference to a commit) or **annotated** (containing metadata like the tagger's name, date, and message). Listing tags is done using `git tag`, while `git tag -l <pattern>` helps filter tags by name. Tags can be created for past commits using `git tag -a <tagname> <commit-hash>`. They are not pushed by default and require `git push origin <tag>` or `git push origin --tags` to sync them with a remote repository. Deleting tags involves `git tag -d <tagname>` locally and `git push origin --delete <tagname>` for remote removal. Checking out a tag with `git checkout <tagname>` puts the repository in a **detached HEAD** state, meaning new commits won't belong to any branch unless a new branch is explicitly created. To manage frequently used Git commands efficiently, **aliases** can be configured via `git config --global alias.<shortcut> <command>`. Examples include `git co` for `checkout` and `git st` for `status`. More complex aliases, such as `git unstage` for `reset HEAD --`, simplify workflows, while external commands can also be aliased using `!`. At this point, you can perform all basic local Git operations. Next, we'll cover Git's killer feature: its branching model.
+
 
 ### Summary of Commands
 
